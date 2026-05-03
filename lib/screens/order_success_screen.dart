@@ -7,6 +7,8 @@ import '../db/orders_repo.dart';
 import '../models/order_header.dart';
 import '../navigation/app_shell_controller.dart';
 import '../theme.dart';
+import '../widgets/blink_text.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_panel.dart';
 
@@ -41,49 +43,72 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
     final order = _order;
 
     return Scaffold(
-      appBar: retroAppBar('ГОТОВО'),
+      appBar: retroAppBar('\u2605 SUCCESS \u2605'),
       body: Padding(
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: RetroPanel(
-          title: 'ЗАКАЗ ОТПРАВЛЕН (локально)',
+          title: '\u2605 ORDER SUBMITTED \u2605',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'СПАСИБО!',
+              const BlinkText(
+                text: '\u2605\u2605\u2605 THANK YOU! \u2605\u2605\u2605',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: RetroTheme.text),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  color: RetroTheme.accentYellow,
+                  shadows: [
+                    Shadow(
+                        offset: Offset(2, 2),
+                        color: Color(0xFFFF0000),
+                        blurRadius: 0),
+                  ],
+                ),
               ),
-              const SizedBox(height: RetroSpacing.sm),
-              Text('Номер заказа: #${widget.orderId}',
-                  style: const TextStyle(color: RetroTheme.text)),
+              const RainbowDivider(height: 2),
+              Text('Order #${widget.orderId}',
+                  style: const TextStyle(
+                    color: RetroTheme.text,
+                    fontFamily: 'monospace',
+                  )),
               const SizedBox(height: RetroSpacing.sm),
               if (order != null)
                 Text.rich(
                   TextSpan(
-                    style: const TextStyle(color: RetroTheme.text),
+                    style: const TextStyle(
+                      color: RetroTheme.text,
+                      fontFamily: 'monospace',
+                    ),
                     children: [
-                      const TextSpan(text: 'Статус: '),
+                      const TextSpan(text: 'Status: '),
                       TextSpan(
                           text: order.status.dbValue,
-                          style: const TextStyle(fontWeight: FontWeight.w900)),
-                      const TextSpan(text: ' · Сумма: '),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            color: RetroTheme.accentCyan,
+                          )),
+                      const TextSpan(text: ' \u00B7 Total: '),
                       TextSpan(
                         text: order.total.toStringAsFixed(0),
-                        style: const TextStyle(fontWeight: FontWeight.w900),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: RetroTheme.accentYellow,
+                        ),
                       ),
-                      const TextSpan(text: ' ₽'),
+                      const TextSpan(text: ' \u20BD'),
                     ],
                   ),
                 )
               else
-                const Text('Загрузка статуса…',
-                    style: TextStyle(color: RetroTheme.text)),
+                const Text('Loading status...',
+                    style: TextStyle(
+                      color: RetroTheme.text,
+                      fontFamily: 'monospace',
+                    )),
               const SizedBox(height: RetroSpacing.sm),
               RetroButton(
-                title: 'СКОПИРОВАТЬ ID',
+                title: 'COPY ID',
                 variant: RetroButtonVariant.link,
                 onPressed: () async {
                   await Clipboard.setData(
@@ -93,7 +118,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                     context: context,
                     builder: (ctx) => AlertDialog(
                       title: const Text('OK'),
-                      content: const Text('ID скопирован'),
+                      content: const Text('ID copied!'),
                       actions: [
                         TextButton(
                             onPressed: () => Navigator.pop(ctx),
@@ -105,7 +130,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
               ),
               const SizedBox(height: RetroSpacing.sm),
               RetroButton(
-                title: 'ИМИТАЦИЯ: ДАЛЬШЕ ПО СТАТУСУ',
+                title: 'SIMULATE: NEXT STATUS',
                 onPressed: () async {
                   final next = await advanceOrderStatus(db, widget.orderId);
                   if (!mounted) return;
@@ -114,7 +139,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
               ),
               const SizedBox(height: RetroSpacing.sm),
               RetroButton(
-                title: 'К ЗАКАЗАМ',
+                title: 'GO TO ORDERS',
                 onPressed: () {
                   context.read<AppShellController>().goToTabAndPopToRoot(2);
                   Navigator.of(context, rootNavigator: true).pop();
@@ -122,7 +147,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
               ),
               const SizedBox(height: RetroSpacing.sm),
               RetroButton(
-                title: 'В КАТАЛОГ',
+                title: 'BACK TO CATALOG',
                 onPressed: () {
                   context.read<AppShellController>().goToTabAndPopToRoot(0);
                   Navigator.of(context, rootNavigator: true).pop();

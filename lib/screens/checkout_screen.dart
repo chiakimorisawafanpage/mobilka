@@ -7,6 +7,7 @@ import '../db/orders_repo.dart';
 import '../models/cart_line.dart';
 import '../models/payment_method.dart';
 import '../theme.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
 import '../widgets/retro_panel.dart';
@@ -31,10 +32,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   static final List<RetroSelectOption<PaymentMethod>> _payOptions = [
     const RetroSelectOption(
-        value: PaymentMethod.cash, label: 'НАЛИЧНЫЕ (как раньше)'),
+        value: PaymentMethod.cash, label: 'CASH (old school)'),
     const RetroSelectOption(
-        value: PaymentMethod.card, label: 'КАРТА (заглушка)'),
-    const RetroSelectOption(value: PaymentMethod.sbp, label: 'СБП (заглушка)'),
+        value: PaymentMethod.card, label: 'CARD (stub)'),
+    const RetroSelectOption(value: PaymentMethod.sbp, label: 'SBP (stub)'),
   ];
 
   Future<void> _reload() async {
@@ -59,46 +60,50 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final db = context.read<Database>();
 
     return Scaffold(
-      appBar: retroAppBar('ОФОРМЛЕНИЕ'),
+      appBar: retroAppBar('\u2605 CHECKOUT \u2605'),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: 'ЧЕКАУТ (локально)',
+            title: '\u2605 CHECKOUT (local) \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'ИТОГО: ${_total.toStringAsFixed(0)} ₽',
+                  'TOTAL: ${_total.toStringAsFixed(0)} \u20BD',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w900, color: RetroTheme.text),
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.accentYellow,
+                    fontSize: 16,
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.sm),
                 RetroInput(
-                  label: 'АДРЕС',
+                  label: 'ADDRESS',
                   value: _address,
                   onChanged: (t) => setState(() => _address = t),
-                  placeholder: 'Город, улица, дом…',
+                  placeholder: 'City, street, building...',
                 ),
                 RetroInput(
-                  label: 'КОММЕНТАРИЙ',
+                  label: 'COMMENT',
                   value: _comment,
                   onChanged: (t) => setState(() => _comment = t),
-                  placeholder: 'Подъезд/домофон…',
+                  placeholder: 'Entrance/intercom...',
                   multiline: true,
                 ),
                 RetroSelect<PaymentMethod>(
-                  label: 'ОПЛАТА',
+                  label: 'PAYMENT',
                   value: _payment,
                   options: _payOptions,
                   onChanged: (v) => setState(() => _payment = v),
                 ),
                 RetroButton(
-                    title: 'ОБНОВИТЬ КОРЗИНУ',
+                    title: 'REFRESH CART',
                     variant: RetroButtonVariant.link,
                     onPressed: _reload),
                 RetroButton(
-                  title: 'ПОДТВЕРДИТЬ ЗАКАЗ',
+                  title: 'CONFIRM ORDER >>',
                   disabled: _lines.isEmpty || _isSubmitting,
                   onPressed: () async {
                     if (_lines.isEmpty) {
@@ -108,8 +113,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       await showDialog<void>(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: const Text('ОШИБКА'),
-                          content: const Text('Адрес слишком короткий'),
+                          title: const Text('ERROR'),
+                          content: const Text('Address is too short'),
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(ctx),
@@ -141,9 +146,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       await showDialog<void>(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: const Text('ОШИБКА'),
+                          title: const Text('ERROR'),
                           content: Text(
-                              e is Error ? e.toString() : 'Неизвестная ошибка'),
+                              e is Error ? e.toString() : 'Unknown error'),
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(ctx),
@@ -161,22 +166,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ],
             ),
           ),
-          const SizedBox(height: RetroSpacing.md),
+          const RainbowDivider(height: 2),
           RetroPanel(
-            title: 'СОСТАВ',
+            title: '\u2605 CART CONTENTS \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_lines.isEmpty)
-                  const Text('Корзина пустая.',
-                      style: TextStyle(color: RetroTheme.text)),
+                  const Text('Cart is empty.',
+                      style: TextStyle(
+                        color: RetroTheme.text,
+                        fontFamily: 'monospace',
+                      )),
                 ..._lines.map(
                   (l) => Padding(
                     padding: const EdgeInsets.only(top: RetroSpacing.xs),
                     child: Text(
-                      '- ${l.title} × ${l.qty} = ${(l.qty * l.price).toStringAsFixed(0)} ₽',
+                      '> ${l.title} x${l.qty} = ${(l.qty * l.price).toStringAsFixed(0)} \u20BD',
                       style: const TextStyle(
-                          fontWeight: FontWeight.w700, color: RetroTheme.text),
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.text,
+                      ),
                     ),
                   ),
                 ),

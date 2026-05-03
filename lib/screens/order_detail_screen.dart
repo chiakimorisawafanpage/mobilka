@@ -6,6 +6,7 @@ import '../db/orders_repo.dart';
 import '../models/order_header.dart';
 import '../models/order_line.dart';
 import '../theme.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_panel.dart';
 
@@ -46,99 +47,45 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
     if (order == null) {
       return Scaffold(
-        appBar: retroAppBar('ЗАКАЗ'),
+        appBar: retroAppBar('ORDER'),
         body: const Center(
-            child: Text('ЗАГРУЗКА…',
-                style: TextStyle(fontWeight: FontWeight.w800))),
+            child: Text('LOADING...',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'monospace',
+                  color: RetroTheme.text,
+                ))),
       );
     }
 
     return Scaffold(
-      appBar: retroAppBar('ЗАКАЗ'),
+      appBar: retroAppBar('ORDER'),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: 'ЗАКАЗ #${order.id}',
+            title: '\u2605 ORDER #${order.id} \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(color: RetroTheme.text),
-                    children: [
-                      const TextSpan(
-                          text: 'СТАТУС: ',
-                          style: TextStyle(fontWeight: FontWeight.w900)),
-                      TextSpan(text: order.status.dbValue.toUpperCase()),
-                    ],
-                  ),
-                ),
+                _infoRow('STATUS', order.status.dbValue.toUpperCase()),
                 const SizedBox(height: RetroSpacing.xs),
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(color: RetroTheme.text),
-                    children: [
-                      const TextSpan(
-                          text: 'СУММА: ',
-                          style: TextStyle(fontWeight: FontWeight.w900)),
-                      TextSpan(text: '${order.total.toStringAsFixed(0)} ₽'),
-                    ],
-                  ),
-                ),
+                _infoRow('TOTAL', '${order.total.toStringAsFixed(0)} \u20BD'),
                 const SizedBox(height: RetroSpacing.xs),
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(color: RetroTheme.text),
-                    children: [
-                      const TextSpan(
-                          text: 'ОПЛАТА: ',
-                          style: TextStyle(fontWeight: FontWeight.w900)),
-                      TextSpan(text: order.paymentMethod.dbValue.toUpperCase()),
-                    ],
-                  ),
-                ),
+                _infoRow(
+                    'PAYMENT', order.paymentMethod.dbValue.toUpperCase()),
                 const SizedBox(height: RetroSpacing.xs),
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(color: RetroTheme.text),
-                    children: [
-                      const TextSpan(
-                          text: 'ДАТА: ',
-                          style: TextStyle(fontWeight: FontWeight.w900)),
-                      TextSpan(text: order.createdAt),
-                    ],
-                  ),
-                ),
+                _infoRow('DATE', order.createdAt),
                 const SizedBox(height: RetroSpacing.xs),
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(color: RetroTheme.text),
-                    children: [
-                      const TextSpan(
-                          text: 'АДРЕС: ',
-                          style: TextStyle(fontWeight: FontWeight.w900)),
-                      TextSpan(text: order.address),
-                    ],
-                  ),
-                ),
-                if (order.comment != null && order.comment!.isNotEmpty) ...[
+                _infoRow('ADDRESS', order.address),
+                if (order.comment != null &&
+                    order.comment!.isNotEmpty) ...[
                   const SizedBox(height: RetroSpacing.xs),
-                  Text.rich(
-                    TextSpan(
-                      style: const TextStyle(color: RetroTheme.text),
-                      children: [
-                        const TextSpan(
-                            text: 'КОММЕНТ: ',
-                            style: TextStyle(fontWeight: FontWeight.w900)),
-                        TextSpan(text: order.comment!),
-                      ],
-                    ),
-                  ),
+                  _infoRow('COMMENT', order.comment!),
                 ],
                 const SizedBox(height: RetroSpacing.sm),
                 RetroButton(
-                  title: 'ИМИТАЦИЯ: СЛЕДУЮЩИЙ СТАТУС',
+                  title: 'SIMULATE: NEXT STATUS',
                   onPressed: () async {
                     await advanceOrderStatus(db, order.id);
                     await _reload();
@@ -147,9 +94,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ],
             ),
           ),
-          const SizedBox(height: RetroSpacing.md),
+          const RainbowDivider(height: 2),
           RetroPanel(
-            title: 'ПОЗИЦИИ',
+            title: '\u2605 ORDER ITEMS \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -157,9 +104,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   (l) => Padding(
                     padding: const EdgeInsets.only(top: RetroSpacing.xs),
                     child: Text(
-                      '- ${l.title} × ${l.qty} @ ${l.priceAtPurchase.toStringAsFixed(0)} ₽ = ${(l.qty * l.priceAtPurchase).toStringAsFixed(0)} ₽',
+                      '> ${l.title} x${l.qty} @ ${l.priceAtPurchase.toStringAsFixed(0)} \u20BD = ${(l.qty * l.priceAtPurchase).toStringAsFixed(0)} \u20BD',
                       style: const TextStyle(
-                          fontWeight: FontWeight.w700, color: RetroTheme.text),
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.text,
+                      ),
                     ),
                   ),
                 ),
@@ -167,6 +117,26 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             ),
           ),
           const SizedBox(height: RetroSpacing.lg),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoRow(String label, String value) {
+    return Text.rich(
+      TextSpan(
+        style: const TextStyle(
+          color: RetroTheme.text,
+          fontFamily: 'monospace',
+        ),
+        children: [
+          TextSpan(
+              text: '$label: ',
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                color: RetroTheme.accentCyan,
+              )),
+          TextSpan(text: value),
         ],
       ),
     );

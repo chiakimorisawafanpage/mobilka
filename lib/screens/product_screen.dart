@@ -9,6 +9,7 @@ import '../models/product.dart';
 import '../models/review.dart';
 import '../navigation/app_shell_controller.dart';
 import '../theme.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
 import '../widgets/retro_panel.dart';
@@ -52,29 +53,41 @@ class _ProductScreenState extends State<ProductScreen> {
 
     if (product == null) {
       return Scaffold(
-        appBar: retroAppBar('ТОВАР'),
+        appBar: retroAppBar('PRODUCT'),
         body: const Center(
-            child: Text('ЗАГРУЗКА…',
-                style: TextStyle(fontWeight: FontWeight.w800))),
+            child: Text('LOADING...',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'monospace',
+                  color: RetroTheme.text,
+                ))),
       );
     }
 
     return Scaffold(
-      appBar: retroAppBar('ТОВАР'),
+      appBar: retroAppBar('PRODUCT'),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: 'ТОВАР',
+            title: '\u2605 PRODUCT INFO \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   product.title.toUpperCase(),
                   style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      color: RetroTheme.text),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.accentYellow,
+                    shadows: [
+                      Shadow(
+                          offset: Offset(2, 2),
+                          color: Color(0xFF000000),
+                          blurRadius: 0),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.sm),
                 ProductThumb(
@@ -83,74 +96,103 @@ class _ProductScreenState extends State<ProductScreen> {
                     height: 130),
                 const SizedBox(height: RetroSpacing.sm),
                 Text(
-                  '${product.brand.toUpperCase()} · ${product.flavor.toUpperCase()} · ${product.volumeMl} мл',
+                  '${product.brand.toUpperCase()} \u00B7 ${product.flavor.toUpperCase()} \u00B7 ${product.volumeMl} ml',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w800, color: RetroTheme.muted),
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.muted,
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
                 Text(
-                  '${product.price.toStringAsFixed(0)} ₽',
+                  '${product.price.toStringAsFixed(0)} \u20BD',
                   style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      color: RetroTheme.text),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.accentYellow,
+                    shadows: [
+                      Shadow(
+                          offset: Offset(1, 1),
+                          color: Color(0xFFFF0000),
+                          blurRadius: 0),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.sm),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(RetroSpacing.sm),
                   decoration: BoxDecoration(
-                    color: RetroTheme.accentBg,
-                    border: Border.all(color: RetroTheme.border, width: 2),
+                    color: const Color(0xFF000000),
+                    border:
+                        Border.all(color: RetroTheme.accentCyan, width: 1),
                   ),
                   child: Text(product.eraNote,
-                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.accentPink,
+                        fontStyle: FontStyle.italic,
+                      )),
                 ),
-                const SizedBox(height: RetroSpacing.md),
+                const RainbowDivider(height: 2),
                 const Text(
-                  'ОПИСАНИЕ',
+                  '>> DESCRIPTION <<',
                   style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      decoration: TextDecoration.underline),
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.accentCyan,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
                 Text(product.description,
-                    style: const TextStyle(color: RetroTheme.text)),
+                    style: const TextStyle(
+                      color: RetroTheme.text,
+                      fontFamily: 'monospace',
+                    )),
                 const SizedBox(height: RetroSpacing.md),
                 const Text(
-                  'СОСТАВ (как на старом сайте)',
+                  '>> INGREDIENTS <<',
                   style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      decoration: TextDecoration.underline),
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.accentCyan,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
                 Text(product.ingredients,
-                    style: const TextStyle(color: RetroTheme.text)),
+                    style: const TextStyle(
+                      color: RetroTheme.text,
+                      fontFamily: 'monospace',
+                    )),
               ],
             ),
           ),
           const SizedBox(height: RetroSpacing.md),
           RetroPanel(
-            title: 'В КОРЗИНУ',
+            title: '\u2605 ADD TO CART \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RetroInput(
-                  label: 'КОЛ-ВО',
+                  label: 'QTY',
                   value: _qty,
                   onChanged: (t) => setState(() => _qty = t),
                   keyboardType: TextInputType.number,
                 ),
                 RetroButton(
-                  title: 'ДОБАВИТЬ',
+                  title: 'ADD TO CART',
                   onPressed: () async {
                     final n = double.tryParse(_qty);
                     if (n == null || !n.isFinite || n <= 0) {
                       await showDialog<void>(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: const Text('ОШИБКА'),
-                          content: const Text('Введите нормальное количество'),
+                          title: const Text('ERROR'),
+                          content: const Text('Enter a valid quantity'),
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(ctx),
@@ -165,8 +207,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                              'Товар добавлен в корзину (вкладка КОРЗИНА).'),
+                          content: Text('Added to cart! Check CART tab.'),
                           duration: Duration(milliseconds: 1200),
                         ),
                       );
@@ -174,7 +215,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Ошибка корзины: $e'),
+                          content: Text('Cart error: $e'),
                           backgroundColor: RetroTheme.danger,
                         ),
                       );
@@ -182,7 +223,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   },
                 ),
                 RetroButton(
-                  title: 'ПЕРЕЙТИ В КОРЗИНУ',
+                  title: 'GO TO CART',
                   variant: RetroButtonVariant.link,
                   onPressed: () {
                     context.read<AppShellController>().setTab(1);
@@ -194,13 +235,17 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
           const SizedBox(height: RetroSpacing.md),
           RetroPanel(
-            title: 'ОТЗЫВЫ (${_reviews.length})',
+            title: '\u2605 REVIEWS (${_reviews.length}) \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_reviews.isEmpty)
-                  const Text('Пока нет отзывов (но это не баг, это эпоха).',
-                      style: TextStyle(color: RetroTheme.text)),
+                  const Text(
+                      'No reviews yet (but that\'s not a bug, it\'s an era).',
+                      style: TextStyle(
+                        color: RetroTheme.text,
+                        fontFamily: 'monospace',
+                      )),
                 ..._reviews.map(
                   (rv) => Padding(
                     padding: const EdgeInsets.only(top: RetroSpacing.sm),
@@ -208,19 +253,27 @@ class _ProductScreenState extends State<ProductScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(RetroSpacing.sm),
                       decoration: BoxDecoration(
-                        color: RetroTheme.panel,
-                        border: Border.all(color: RetroTheme.border, width: 2),
+                        color: const Color(0xFF000000),
+                        border: Border.all(
+                            color: RetroTheme.border, width: 2),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${rv.author} · ${rv.rating}/5',
-                            style: const TextStyle(fontWeight: FontWeight.w900),
+                            '${rv.author} \u00B7 ${rv.rating}/5 ${'★' * rv.rating}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.accentYellow,
+                            ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(rv.text,
-                              style: const TextStyle(color: RetroTheme.text)),
+                              style: const TextStyle(
+                                color: RetroTheme.text,
+                                fontFamily: 'monospace',
+                              )),
                         ],
                       ),
                     ),

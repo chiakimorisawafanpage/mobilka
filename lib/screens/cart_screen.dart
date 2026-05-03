@@ -7,6 +7,7 @@ import '../models/cart_line.dart';
 import '../navigation/app_shell_controller.dart';
 import '../navigation/route_observer.dart';
 import '../theme.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
 import '../widgets/retro_panel.dart';
@@ -80,25 +81,30 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
     final db = context.read<Database>();
 
     return Scaffold(
-      appBar: retroAppBar('КОРЗИНА', automaticallyImplyLeading: false),
+      appBar:
+          retroAppBar('\u2605 CART \u2605', automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RetroPanel(
-              title: 'КОРЗИНА',
+              title: '\u2605 YOUR CART \u2605',
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'ИТОГО: ${_total.toStringAsFixed(0)} ₽',
+                    'TOTAL: ${_total.toStringAsFixed(0)} \u20BD',
                     style: const TextStyle(
-                        fontWeight: FontWeight.w900, color: RetroTheme.text),
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: RetroTheme.accentYellow,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: RetroSpacing.sm),
                   RetroButton(
-                    title: 'ОФОРМИТЬ ЗАКАЗ',
+                    title: 'CHECKOUT >>',
                     disabled: _lines.isEmpty,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push<void>(
@@ -109,7 +115,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                   ),
                   const SizedBox(height: RetroSpacing.xs),
                   RetroButton(
-                    title: 'ОЧИСТИТЬ КОРЗИНУ',
+                    title: 'CLEAR CART',
                     variant: RetroButtonVariant.danger,
                     disabled: _lines.isEmpty,
                     onPressed: () async {
@@ -120,13 +126,16 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                 ],
               ),
             ),
-            const SizedBox(height: RetroSpacing.md),
+            const RainbowDivider(height: 2),
             Expanded(
               child: _lines.isEmpty
                   ? const Text(
-                      'ПУСТО. КАК СТАРЫЙ САЙТ БЕЗ КОНТЕНТА.',
+                      'EMPTY. Like an old site with no content.',
                       style: TextStyle(
-                          fontWeight: FontWeight.w800, color: RetroTheme.text),
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.text,
+                      ),
                     )
                   : ListView.separated(
                       itemCount: _lines.length,
@@ -141,8 +150,10 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                               Text(
                                 item.title.toUpperCase(),
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    color: RetroTheme.text),
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'monospace',
+                                  color: RetroTheme.accentYellow,
+                                ),
                               ),
                               const SizedBox(height: RetroSpacing.xs),
                               ProductThumb(
@@ -151,21 +162,25 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                                   height: 76),
                               const SizedBox(height: RetroSpacing.xs),
                               Text(
-                                '${item.brand.toUpperCase()} · ${item.volumeMl} мл · ${item.price.toStringAsFixed(0)} ₽/шт',
+                                '${item.brand.toUpperCase()} \u00B7 ${item.volumeMl} ml \u00B7 ${item.price.toStringAsFixed(0)} \u20BD/pc',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: RetroTheme.muted),
+                                  fontWeight: FontWeight.w800,
+                                  fontFamily: 'monospace',
+                                  color: RetroTheme.muted,
+                                ),
                               ),
                               const SizedBox(height: RetroSpacing.xs),
                               Text(
-                                'ПОДИТОГ: ${(item.qty * item.price).toStringAsFixed(0)} ₽',
+                                'SUBTOTAL: ${(item.qty * item.price).toStringAsFixed(0)} \u20BD',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    color: RetroTheme.text),
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'monospace',
+                                  color: RetroTheme.accentYellow,
+                                ),
                               ),
                               const SizedBox(height: RetroSpacing.sm),
                               RetroInput(
-                                label: 'КОЛ-ВО',
+                                label: 'QTY',
                                 value: '${item.qty}',
                                 keyboardType: TextInputType.number,
                                 onChanged: (t) async {
@@ -197,7 +212,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                                     },
                                   ),
                                   RetroButton(
-                                    title: 'УДАЛИТЬ',
+                                    title: 'REMOVE',
                                     variant: RetroButtonVariant.danger,
                                     onPressed: () async {
                                       await removeFromCart(db, item.productId);
