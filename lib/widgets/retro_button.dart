@@ -32,10 +32,11 @@ class RetroButton extends StatelessWidget {
           foregroundColor: RetroTheme.link,
           textStyle: const TextStyle(
             fontWeight: FontWeight.w700,
+            fontFamily: 'monospace',
             decoration: TextDecoration.underline,
           ),
         ),
-        child: Text(title),
+        child: Text('>> $title <<'),
       );
     }
 
@@ -49,25 +50,44 @@ class RetroButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 vertical: RetroSpacing.sm, horizontal: RetroSpacing.md),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: isDanger
-                    ? const [Color(0xFFFFE0E0), Color(0xFFFFC4C4)]
-                    : const [RetroTheme.accentBg, RetroTheme.accentBlue],
+              color: isDanger
+                  ? const Color(0xFF330000)
+                  : RetroTheme.win98Gray,
+              border: Border(
+                top: BorderSide(
+                  color: isDanger
+                      ? const Color(0xFFFF6666)
+                      : RetroTheme.win98Light,
+                  width: 2,
+                ),
+                left: BorderSide(
+                  color: isDanger
+                      ? const Color(0xFFFF6666)
+                      : RetroTheme.win98Light,
+                  width: 2,
+                ),
+                right: BorderSide(
+                  color: isDanger
+                      ? const Color(0xFF660000)
+                      : RetroTheme.win98Darkest,
+                  width: 2,
+                ),
+                bottom: BorderSide(
+                  color: isDanger
+                      ? const Color(0xFF660000)
+                      : RetroTheme.win98Darkest,
+                  width: 2,
+                ),
               ),
-              border: Border.all(color: RetroTheme.border, width: 2),
-              boxShadow: const [
-                BoxShadow(
-                    color: Color(0x66000000),
-                    offset: Offset(2, 2),
-                    blurRadius: 0),
-              ],
             ),
             child: Text(
               title,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w700, color: RetroTheme.text),
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontFamily: 'monospace',
+                fontSize: 12,
+                color: isDanger ? RetroTheme.danger : const Color(0xFF000000),
+              ),
             ),
           ),
         ),

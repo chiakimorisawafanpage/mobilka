@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-/// Бегущая строка как на старых сайтах (без внешних пакетов).
 class RetroMarquee extends StatefulWidget {
   const RetroMarquee({super.key, required this.text});
 
@@ -33,16 +32,17 @@ class _RetroMarqueeState extends State<RetroMarquee>
   Widget build(BuildContext context) {
     const style = TextStyle(
       fontWeight: FontWeight.w900,
+      fontFamily: 'monospace',
       fontSize: 13,
       letterSpacing: 1.1,
-      color: RetroTheme.danger,
+      color: RetroTheme.accentYellow,
       shadows: [
-        Shadow(offset: Offset(1, 1), color: Color(0xFFFFFFFF), blurRadius: 0),
-        Shadow(offset: Offset(-1, -1), color: Color(0xFF0000CC), blurRadius: 0),
+        Shadow(offset: Offset(1, 1), color: Color(0xFFFF0000), blurRadius: 0),
+        Shadow(offset: Offset(-1, -1), color: Color(0xFF00FFFF), blurRadius: 0),
       ],
     );
 
-    final segment = '${widget.text}   ★   ';
+    final segment = '${widget.text}   \u2605   ';
     final tp = TextPainter(
       text: TextSpan(text: segment, style: style),
       textDirection: TextDirection.ltr,
@@ -51,8 +51,19 @@ class _RetroMarqueeState extends State<RetroMarquee>
 
     return ClipRect(
       child: Container(
-        height: 28,
-        color: RetroTheme.accentPink.withValues(alpha: 0.55),
+        height: 30,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF000066),
+              Color(0xFF330066),
+              Color(0xFF000066),
+            ],
+          ),
+          border: Border.symmetric(
+            horizontal: BorderSide(color: RetroTheme.accentCyan, width: 1),
+          ),
+        ),
         alignment: Alignment.centerLeft,
         child: AnimatedBuilder(
           animation: _c,

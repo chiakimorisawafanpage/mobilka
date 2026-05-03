@@ -40,7 +40,11 @@ class RetroSelect<T> extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-                fontWeight: FontWeight.w700, color: RetroTheme.text),
+              fontWeight: FontWeight.w700,
+              fontFamily: 'monospace',
+              color: RetroTheme.accentCyan,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: RetroSpacing.xs),
           InkWell(
@@ -52,13 +56,17 @@ class RetroSelect<T> extends StatelessWidget {
                   return AlertDialog(
                     backgroundColor: RetroTheme.bg,
                     shape: const RoundedRectangleBorder(
-                      side: BorderSide(color: RetroTheme.border, width: 3),
+                      side:
+                          BorderSide(color: RetroTheme.accentBlue, width: 3),
                       borderRadius: BorderRadius.zero,
                     ),
                     title: const Text(
-                      'ВЫБОР (как в 2000-х)',
+                      '\u2605 SELECT \u2605',
                       style: TextStyle(
-                          fontWeight: FontWeight.w900, color: RetroTheme.text),
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.accentYellow,
+                      ),
                     ),
                     content: SizedBox(
                       width: double.maxFinite,
@@ -71,7 +79,7 @@ class RetroSelect<T> extends StatelessWidget {
                               padding: const EdgeInsets.only(
                                   bottom: RetroSpacing.sm),
                               child: Material(
-                                color: RetroTheme.panel,
+                                color: const Color(0xFF000000),
                                 child: InkWell(
                                   onTap: () {
                                     onChanged(o.value);
@@ -86,10 +94,11 @@ class RetroSelect<T> extends StatelessWidget {
                                           color: RetroTheme.border, width: 2),
                                     ),
                                     child: Text(
-                                      o.label,
+                                      '> ${o.label}',
                                       style: const TextStyle(
                                         color: RetroTheme.link,
                                         fontWeight: FontWeight.w800,
+                                        fontFamily: 'monospace',
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
@@ -102,7 +111,7 @@ class RetroSelect<T> extends StatelessWidget {
                     ),
                     actions: [
                       RetroButton(
-                          title: 'ЗАКРЫТЬ',
+                          title: '[X] CLOSE',
                           onPressed: () => Navigator.of(ctx).pop()),
                     ],
                   );
@@ -113,7 +122,7 @@ class RetroSelect<T> extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: RetroSpacing.sm, vertical: RetroSpacing.sm),
               decoration: BoxDecoration(
-                color: RetroTheme.panel,
+                color: const Color(0xFF000000),
                 border: Border.all(color: RetroTheme.border, width: 2),
               ),
               child: Row(
@@ -122,13 +131,18 @@ class RetroSelect<T> extends StatelessWidget {
                     child: Text(
                       _labelFor(value),
                       style: const TextStyle(
-                          fontWeight: FontWeight.w700, color: RetroTheme.text),
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.text,
+                      ),
                     ),
                   ),
                   const Text('[v]',
                       style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          color: RetroTheme.muted)),
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: RetroTheme.accentCyan,
+                      )),
                 ],
               ),
             ),

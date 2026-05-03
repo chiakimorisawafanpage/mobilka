@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-/// «Фото» товара: по возможности GIF из сети, иначе белая заглушка с подписью.
 class ProductThumb extends StatelessWidget {
   const ProductThumb({
     super.key,
@@ -24,11 +23,19 @@ class ProductThumb extends StatelessWidget {
       width: double.infinity,
       height: height,
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
-        border: Border.all(color: RetroTheme.border, width: 2),
-        boxShadow: const [
+        color: const Color(0xFF000000),
+        border: const Border(
+          top: BorderSide(color: RetroTheme.win98Dark, width: 2),
+          left: BorderSide(color: RetroTheme.win98Dark, width: 2),
+          right: BorderSide(color: RetroTheme.win98Light, width: 2),
+          bottom: BorderSide(color: RetroTheme.win98Light, width: 2),
+        ),
+        boxShadow: [
           BoxShadow(
-              color: Color(0x66000000), offset: Offset(2, 2), blurRadius: 0),
+            color: RetroTheme.accentBlue.withValues(alpha: 0.3),
+            offset: const Offset(0, 0),
+            blurRadius: 6,
+          ),
         ],
       ),
       clipBehavior: Clip.hardEdge,
@@ -43,11 +50,16 @@ class ProductThumb extends StatelessWidget {
               loadingBuilder: (context, child, progress) {
                 if (progress == null) return child;
                 return Container(
-                  color: const Color(0xFFE8E8E8),
+                  color: const Color(0xFF000011),
                   alignment: Alignment.center,
                   child: const Text(
-                    'LOADING…',
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+                    'LOADING...',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      fontSize: 11,
+                      color: RetroTheme.text,
+                    ),
                   ),
                 );
               },
@@ -64,8 +76,30 @@ class ProductThumb extends StatelessWidget {
                   horizontal: RetroSpacing.xs, vertical: 2),
               child: Text(
                 hasUrl ? 'GIF' : 'IMG',
-                style:
-                    const TextStyle(fontWeight: FontWeight.w900, fontSize: 10),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  fontSize: 10,
+                  color: RetroTheme.accentYellow,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              color: const Color(0x88000000),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: RetroSpacing.xs, vertical: 2),
+              child: const Text(
+                'Y2K',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  fontSize: 9,
+                  color: RetroTheme.accentPink,
+                ),
               ),
             ),
           ),
@@ -76,15 +110,16 @@ class ProductThumb extends StatelessWidget {
 
   Widget _fallbackLabel(String text) {
     return Container(
-      color: const Color(0xFFFFFFFF),
+      color: const Color(0xFF000011),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: RetroSpacing.sm),
       child: Text(
         text,
         textAlign: TextAlign.center,
         style: const TextStyle(
-          color: RetroTheme.muted,
+          color: RetroTheme.accentCyan,
           fontWeight: FontWeight.w900,
+          fontFamily: 'monospace',
           letterSpacing: 0.6,
           fontSize: 12,
         ),

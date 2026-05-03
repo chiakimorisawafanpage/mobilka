@@ -5,6 +5,8 @@ import 'package:sqflite/sqflite.dart';
 import '../db/profile_repo.dart';
 import '../models/user_profile.dart';
 import '../theme.dart';
+import '../widgets/geocities_badges.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
 import '../widgets/retro_panel.dart';
@@ -41,59 +43,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final db = context.read<Database>();
 
     return Scaffold(
-      appBar: retroAppBar('ПРОФИЛЬ', automaticallyImplyLeading: false),
-      body: Padding(
+      appBar: retroAppBar('\u2605 PROFILE \u2605',
+          automaticallyImplyLeading: false),
+      body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
-        child: RetroPanel(
-          title: 'ПРОФИЛЬ (локально)',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Это не аккаунт в интернете. Это просто строка в SQLite.',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700, color: RetroTheme.text),
-              ),
-              const SizedBox(height: RetroSpacing.sm),
-              RetroInput(
-                  label: 'ИМЯ',
-                  value: _name,
-                  onChanged: (t) => setState(() => _name = t)),
-              RetroInput(
-                label: 'ТЕЛЕФОН',
-                value: _phone,
-                onChanged: (t) => setState(() => _phone = t),
-                keyboardType: TextInputType.phone,
-              ),
-              RetroButton(
-                title: 'СОХРАНИТЬ',
-                onPressed: () async {
-                  await upsertProfile(
-                      db, UserProfile(name: _name, phone: _phone));
-                  if (!context.mounted) return;
-                  await showDialog<void>(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text('OK'),
-                      content: const Text('Сохранено'),
-                      actions: [
-                        TextButton(
-                            onPressed: () => Navigator.pop(ctx),
-                            child: const Text('OK')),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: RetroSpacing.sm),
-              RetroButton(
-                title: 'ПЕРЕЗАГРУЗИТЬ',
-                variant: RetroButtonVariant.link,
-                onPressed: _reload,
-              ),
-            ],
+        children: [
+          RetroPanel(
+            title: '\u2605 MY HOMEPAGE \u2605',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Welcome to my personal page!\nThis is not an account. Just a row in SQLite.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.text,
+                    height: 1.5,
+                  ),
+                ),
+                const RainbowDivider(height: 2),
+                RetroInput(
+                    label: 'NAME',
+                    value: _name,
+                    onChanged: (t) => setState(() => _name = t)),
+                RetroInput(
+                  label: 'PHONE',
+                  value: _phone,
+                  onChanged: (t) => setState(() => _phone = t),
+                  keyboardType: TextInputType.phone,
+                ),
+                RetroButton(
+                  title: 'SAVE',
+                  onPressed: () async {
+                    await upsertProfile(
+                        db, UserProfile(name: _name, phone: _phone));
+                    if (!context.mounted) return;
+                    await showDialog<void>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('OK'),
+                        content: const Text('Saved!'),
+                        actions: [
+                          TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: const Text('OK')),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: RetroSpacing.sm),
+                RetroButton(
+                  title: 'RELOAD',
+                  variant: RetroButtonVariant.link,
+                  onPressed: _reload,
+                ),
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: RetroSpacing.md),
+          const Center(child: GeocitiesGuestbook()),
+          const SizedBox(height: RetroSpacing.sm),
+          const Center(child: GeocitiesHitCounter()),
+          const SizedBox(height: RetroSpacing.sm),
+          const Center(child: GeocitiesBestViewed()),
+          const SizedBox(height: RetroSpacing.sm),
+          const Center(child: GeocitiesWebring()),
+          const SizedBox(height: RetroSpacing.lg),
+        ],
       ),
     );
   }

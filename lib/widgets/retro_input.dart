@@ -60,7 +60,11 @@ class _RetroInputState extends State<RetroInput> {
           Text(
             widget.label,
             style: const TextStyle(
-                fontWeight: FontWeight.w700, color: RetroTheme.text),
+              fontWeight: FontWeight.w700,
+              fontFamily: 'monospace',
+              color: RetroTheme.accentCyan,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: RetroSpacing.xs),
           TextField(
@@ -68,24 +72,37 @@ class _RetroInputState extends State<RetroInput> {
             onChanged: widget.onChanged,
             decoration: InputDecoration(
               hintText: widget.placeholder,
+              hintStyle: TextStyle(
+                color: RetroTheme.text.withValues(alpha: 0.4),
+                fontFamily: 'monospace',
+                fontSize: 13,
+              ),
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: RetroSpacing.sm,
                 vertical: RetroSpacing.sm,
               ),
               border: const OutlineInputBorder(
-                borderSide: BorderSide(color: RetroTheme.border, width: 2),
+                borderSide: BorderSide(color: RetroTheme.accentBlue, width: 2),
+                borderRadius: BorderRadius.zero,
               ),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: RetroTheme.border, width: 2),
+                borderRadius: BorderRadius.zero,
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: RetroTheme.border, width: 2),
+                borderSide: BorderSide(color: RetroTheme.accentCyan, width: 2),
+                borderRadius: BorderRadius.zero,
               ),
               filled: true,
-              fillColor: RetroTheme.panel,
+              fillColor: const Color(0xFF000000),
             ),
-            style: const TextStyle(color: RetroTheme.text),
+            style: const TextStyle(
+              color: RetroTheme.text,
+              fontFamily: 'monospace',
+              fontSize: 14,
+            ),
+            cursorColor: RetroTheme.text,
             maxLines: widget.multiline ? 5 : 1,
             minLines: widget.multiline ? 3 : 1,
             keyboardType: widget.multiline

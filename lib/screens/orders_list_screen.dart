@@ -54,14 +54,18 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: retroAppBar('ЗАКАЗЫ', automaticallyImplyLeading: false),
+      appBar: retroAppBar('\u2605 ORDERS \u2605',
+          automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: _orders.isEmpty
             ? const Text(
-                'ЗАКАЗОВ НЕТ (пока).',
+                'NO ORDERS YET.',
                 style: TextStyle(
-                    fontWeight: FontWeight.w800, color: RetroTheme.text),
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'monospace',
+                  color: RetroTheme.text,
+                ),
               )
             : ListView.separated(
                 itemCount: _orders.length,
@@ -79,30 +83,38 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'ЗАКАЗ #${item.id}',
+                            'ORDER #${item.id}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
                               color: RetroTheme.link,
                               decoration: TextDecoration.underline,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(
-                            '${item.createdAt} · ${item.status.dbValue.toUpperCase()}',
+                            '${item.createdAt} \u00B7 ${item.status.dbValue.toUpperCase()}',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w800,
-                                color: RetroTheme.muted),
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.muted,
+                            ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(
-                            '${item.total.toStringAsFixed(0)} ₽',
+                            '${item.total.toStringAsFixed(0)} \u20BD',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w900,
-                                color: RetroTheme.text),
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.accentYellow,
+                            ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(item.address,
-                              style: const TextStyle(color: RetroTheme.text)),
+                              style: const TextStyle(
+                                color: RetroTheme.text,
+                                fontFamily: 'monospace',
+                              )),
                         ],
                       ),
                     ),

@@ -7,6 +7,9 @@ import '../db/products_repo.dart';
 import '../models/product.dart';
 import '../navigation/route_observer.dart';
 import '../theme.dart';
+import '../widgets/blink_text.dart';
+import '../widgets/geocities_badges.dart';
+import '../widgets/rainbow_divider.dart';
 import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
 import '../widgets/retro_panel.dart';
@@ -34,10 +37,11 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
   List<Product> _products = [];
 
   static final List<RetroSelectOption<ProductSort>> _sortOptions = [
-    const RetroSelectOption(value: ProductSort.priceAsc, label: 'ЦЕНА ↑'),
-    const RetroSelectOption(value: ProductSort.priceDesc, label: 'ЦЕНА ↓'),
+    const RetroSelectOption(value: ProductSort.priceAsc, label: 'PRICE \u2191'),
     const RetroSelectOption(
-        value: ProductSort.titleAsc, label: 'НАЗВАНИЕ (A-Z)'),
+        value: ProductSort.priceDesc, label: 'PRICE \u2193'),
+    const RetroSelectOption(
+        value: ProductSort.titleAsc, label: 'TITLE (A-Z)'),
   ];
 
   ProductFilters get _filters {
@@ -116,45 +120,60 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
     final db = context.read<Database>();
 
     final brandOptions = [
-      const RetroSelectOption<String>(value: 'any', label: 'ЛЮБОЙ БРЕНД'),
+      const RetroSelectOption<String>(value: 'any', label: 'ALL BRANDS'),
       ..._brands
           .map((b) => RetroSelectOption(value: b, label: b.toUpperCase())),
     ];
     final flavorOptions = [
-      const RetroSelectOption<String>(value: 'any', label: 'ЛЮБОЙ ВКУС'),
+      const RetroSelectOption<String>(value: 'any', label: 'ALL FLAVORS'),
       ..._flavors
           .map((f) => RetroSelectOption(value: f, label: f.toUpperCase())),
     ];
 
     return Scaffold(
-      appBar: retroAppBar('КАТАЛОГ', automaticallyImplyLeading: false),
+      appBar: retroAppBar('\u2605 CATALOG \u2605',
+          automaticallyImplyLeading: false),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           const RetroMarquee(
             text:
-                '★ ДОБРО ПОЖАЛОВАТЬ В RETRO ENERGY SHOP ★ ЛУЧШИЕ ЦЕНЫ 2005 ★ GIF КАК НА СТАРЫХ САЙТАХ ★ ЖМИ «В КОРЗИНУ» ★',
+                '\u2605 WELCOME TO RETRO ENERGY SHOP \u2605 BEST PRICES SINCE 2005 \u2605 GIF LIKE OLD SITES \u2605 CLICK "ADD TO CART" \u2605',
           ),
           const SizedBox(height: RetroSpacing.sm),
+          const Center(child: GeocitiesUnderConstruction()),
+          const SizedBox(height: RetroSpacing.sm),
+          const Center(
+            child: BlinkText(
+              text: '\u2605\u2605\u2605 NEW ITEMS ADDED! \u2605\u2605\u2605',
+              style: TextStyle(
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w900,
+                fontSize: 14,
+                color: RetroTheme.accentPink,
+              ),
+            ),
+          ),
+          const RainbowDivider(),
           RetroPanel(
-            title: 'ПОИСК ПО КАТАЛОГУ',
+            title: '\u2605 SEARCH CATALOG \u2605',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RetroInput(
-                  label: 'ПОИСК',
+                  label: 'SEARCH',
                   value: _search,
                   onChanged: (t) => setState(() => _search = t),
-                  placeholder: 'monster / burn / cola…',
+                  placeholder: 'monster / burn / cola...',
                 ),
                 RetroSelect<String>(
-                  label: 'БРЕНД',
+                  label: 'BRAND',
                   value: _brand,
                   options: brandOptions,
                   onChanged: (v) => setState(() => _brand = v),
                 ),
                 RetroSelect<String>(
-                  label: 'ВКУС',
+                  label: 'FLAVOR',
                   value: _flavor,
                   options: flavorOptions,
                   onChanged: (v) => setState(() => _flavor = v),
@@ -164,7 +183,7 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                   children: [
                     Expanded(
                       child: RetroInput(
-                        label: 'ЦЕНА ОТ',
+                        label: 'PRICE FROM',
                         value: _minPrice,
                         onChanged: (t) => setState(() => _minPrice = t),
                         keyboardType: TextInputType.number,
@@ -173,7 +192,7 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                     const SizedBox(width: RetroSpacing.sm),
                     Expanded(
                       child: RetroInput(
-                        label: 'ЦЕНА ДО',
+                        label: 'PRICE TO',
                         value: _maxPrice,
                         onChanged: (t) => setState(() => _maxPrice = t),
                         keyboardType: TextInputType.number,
@@ -182,7 +201,7 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                   ],
                 ),
                 RetroSelect<ProductSort>(
-                  label: 'СОРТИРОВКА',
+                  label: 'SORT BY',
                   value: _sort,
                   options: _sortOptions,
                   onChanged: (v) => setState(() => _sort = v),
@@ -192,9 +211,9 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                   runSpacing: RetroSpacing.sm,
                   children: [
                     RetroButton(
-                        title: 'ПРИМЕНИТЬ ФИЛЬТРЫ', onPressed: _reloadProducts),
+                        title: 'APPLY FILTERS', onPressed: _reloadProducts),
                     RetroButton(
-                      title: 'СБРОС',
+                      title: 'RESET',
                       variant: RetroButtonVariant.link,
                       onPressed: () {
                         setState(() {
@@ -213,11 +232,20 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
               ],
             ),
           ),
-          const SizedBox(height: RetroSpacing.md),
+          const RainbowDivider(),
           Text(
-            'ТОВАРЫ (${_products.length})',
+            '\u2605 PRODUCTS (${_products.length}) \u2605',
             style: const TextStyle(
-                fontWeight: FontWeight.w900, color: RetroTheme.text),
+              fontWeight: FontWeight.w900,
+              fontFamily: 'monospace',
+              color: RetroTheme.accentYellow,
+              shadows: [
+                Shadow(
+                    offset: Offset(1, 1),
+                    color: Color(0xFF000000),
+                    blurRadius: 0),
+              ],
+            ),
           ),
           const SizedBox(height: RetroSpacing.sm),
           ..._products.map(
@@ -239,6 +267,7 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                             item.title.toUpperCase(),
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
                               color: RetroTheme.link,
                               decoration: TextDecoration.underline,
                             ),
@@ -248,21 +277,37 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                               label: item.imageLabel, gifUrl: item.gifUrl),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(
-                            '${item.brand.toUpperCase()} · ${item.flavor.toUpperCase()} · ${item.volumeMl} мл',
+                            '${item.brand.toUpperCase()} \u00B7 ${item.flavor.toUpperCase()} \u00B7 ${item.volumeMl} ml',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w800,
-                                color: RetroTheme.muted),
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.muted,
+                            ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(
-                            '${item.price.toStringAsFixed(0)} ₽',
+                            '${item.price.toStringAsFixed(0)} \u20BD',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w900,
-                                color: RetroTheme.text),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.accentYellow,
+                              shadows: [
+                                Shadow(
+                                    offset: Offset(1, 1),
+                                    color: Color(0xFFFF0000),
+                                    blurRadius: 0),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(item.eraNote,
-                              style: const TextStyle(color: RetroTheme.text)),
+                              style: const TextStyle(
+                                color: RetroTheme.accentCyan,
+                                fontFamily: 'monospace',
+                                fontSize: 11,
+                                fontStyle: FontStyle.italic,
+                              )),
                         ],
                       ),
                     ),
@@ -273,39 +318,15 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         RetroButton(
-                          title: 'В КОРЗИНУ (+1)',
+                          title: 'ADD TO CART (+1)',
                           onPressed: () async {
                             try {
                               await addToCart(db, item.id, 1);
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'В корзину: ${item.title} (+1). Открой вкладку КОРЗИНА.'),
-                                  duration: const Duration(milliseconds: 1400),
-                                ),
-                              );
-                            } catch (e) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Ошибка корзины: $e'),
-                                  backgroundColor: RetroTheme.danger,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        RetroButton(
-                          title: 'В КОРЗИНУ (+3)',
-                          onPressed: () async {
-                            try {
-                              await addToCart(db, item.id, 3);
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                      'Добавлено +3. Смотри вкладку КОРЗИНА.'),
+                                  content:
+                                      Text('Item added! Check CART tab.'),
                                   duration: Duration(milliseconds: 1200),
                                 ),
                               );
@@ -313,7 +334,7 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Ошибка корзины: $e'),
+                                  content: Text('Error: $e'),
                                   backgroundColor: RetroTheme.danger,
                                 ),
                               );
@@ -321,7 +342,7 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                           },
                         ),
                         RetroButton(
-                          title: 'КАРТОЧКА',
+                          title: 'DETAILS',
                           variant: RetroButtonVariant.link,
                           onPressed: () {
                             Navigator.of(context)
@@ -335,6 +356,13 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
               ),
             ),
           ),
+          const RainbowDivider(),
+          const Center(child: GeocitiesHitCounter()),
+          const SizedBox(height: RetroSpacing.sm),
+          const Center(child: GeocitiesBestViewed()),
+          const SizedBox(height: RetroSpacing.sm),
+          const Center(child: GeocitiesWebring()),
+          const SizedBox(height: RetroSpacing.lg),
         ],
       ),
     );
