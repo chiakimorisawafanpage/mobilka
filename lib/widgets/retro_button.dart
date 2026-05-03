@@ -35,7 +35,7 @@ class RetroButton extends StatelessWidget {
               fontFamily: 'monospace',
               fontSize: 12,
               decoration: TextDecoration.underline,
-              decorationColor: RetroTheme.bloodRed,
+              decorationColor: disabled ? RetroTheme.muted : RetroTheme.bloodRed,
             ),
           ),
         ),

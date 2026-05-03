@@ -25,10 +25,15 @@ class _RetroMarqueeState extends State<RetroMarquee>
 
   Future<void> _scroll() async {
     while (!_disposed && _sc.hasClients) {
+      final max = _sc.position.maxScrollExtent;
+      if (max <= 0) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        continue;
+      }
       await _sc.animateTo(
-        _sc.position.maxScrollExtent,
+        max,
         duration: Duration(
-            milliseconds: (_sc.position.maxScrollExtent * 35).floor()),
+            milliseconds: (max * 35).floor()),
         curve: Curves.linear,
       );
       if (_disposed || !_sc.hasClients) break;
