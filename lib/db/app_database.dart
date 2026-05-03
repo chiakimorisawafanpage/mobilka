@@ -6,6 +6,31 @@ import 'products_seed.dart';
 import 'reviews_seed.dart';
 import 'energy_drinks_seed.dart';
 
+/// Map of product title → new working image URL.
+/// Used by v5 migration to fix broken sweet-shop.si CDN links.
+const _energyDrinkImageFixes = <String, String>{
+  'Monster Energy — Pacific Punch':
+      'https://i5.walmartimages.com/asr/6a0c2ade-cfd2-4ec6-b2ec-8bc68c4daacc.b1c1fa4b09abad1e449123578c5e58ba.jpeg',
+  'Monster Energy — Ultra Black':
+      'https://i5.walmartimages.com/asr/10a2b16b-3ceb-482e-8004-238f72854ae2.a61dd710a02491a6d68446bd0470f92f.jpeg',
+  'Monster Energy — Rehab Lemonade':
+      'https://i0.wp.com/vikingcocacola.com/wp-content/uploads/2020/12/Monster-Rehab-Lemonade-1.png',
+  'Monster Energy — Ultra Violet':
+      'https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_69e9b17f-25ef-4f72-9fd1-9a64a5811300.png',
+  'Monster Energy — Ripper':
+      'https://web-assests.monsterenergy.com/mnst/231c4e82-d9dc-4a12-87e8-20d6564894a6.png',
+  'Monster Energy — Ultra Peachy Keen':
+      'https://i5.walmartimages.com/seo/Monster-Ultra-Peachy-Keen-16-fl-oz_98fe6dbc-345c-4806-895a-c3ea0746183a.989d3864101f7bf7bdba361551551881.jpeg',
+  'Monster Energy — Bad Apple':
+      'https://www.kroger.com/product/images/large/front/0007084789956',
+  'Monster Energy — Nitro':
+      'https://www.kroger.com/product/images/large/front/0007084703775',
+  'Monster Energy — Ultra Watermelon':
+      'https://groceries.morrisons.com/images-v3/4b85987b-1398-4173-a0c1-3546047c9d74/6a847da5-ae79-41d2-9083-9e6dc7a24866/500x500.jpg',
+  'Rockstar Energy — Original':
+      'https://www.kroger.com/product/images/large/front/0081809400010',
+};
+
 /// Same DDL as [src/db/schema.ts](retro-energy-shop/src/db/schema.ts).
 /// One statement per `execute` for sqflite compatibility.
 Future<void> _createSchema(Database db) async {
@@ -152,7 +177,7 @@ Future<Database> openAppDatabase() async {
 
   return openDatabase(
     path,
-    version: 4,
+    version: 5,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
     },
@@ -179,6 +204,14 @@ Future<Database> openAppDatabase() async {
           createdAt TEXT NOT NULL
         )''');
         await db.execute('DROP TABLE IF EXISTS user_profile');
+      }
+      if (oldVersion < 5) {
+        for (final entry in _energyDrinkImageFixes.entries) {
+          await db.rawUpdate(
+            'UPDATE products SET gifUrl = ? WHERE title = ?',
+            [entry.value, entry.key],
+          );
+        }
       }
       await _backfillProductGifUrls(db);
       await _seedIfEmpty(db);
