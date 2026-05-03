@@ -42,7 +42,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route is PageRoute<dynamic>) {
-      appRouteObserver.subscribe(this, route);
+      cartRouteObserver.subscribe(this, route);
     }
     final shell = context.read<AppShellController>();
     if (!identical(shell, _shell)) {
@@ -61,7 +61,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
   @override
   void dispose() {
     _shell?.removeListener(_onShellChanged);
-    appRouteObserver.unsubscribe(this);
+    cartRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

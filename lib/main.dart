@@ -1,6 +1,9 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'db/app_database.dart';
 import 'navigation/app_shell.dart';
@@ -9,6 +12,10 @@ import 'theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb && (Platform.isLinux || Platform.isWindows)) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   final db = await openAppDatabase();
   runApp(RetroEnergyApp(database: db));
 }

@@ -30,13 +30,13 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route is PageRoute<dynamic>) {
-      appRouteObserver.subscribe(this, route);
+      ordersRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    appRouteObserver.unsubscribe(this);
+    ordersRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

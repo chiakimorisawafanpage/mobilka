@@ -12,10 +12,9 @@ class GeocitiesHitCounter extends StatelessWidget {
     final count = (math.Random(42).nextInt(90000) + 10000).toString();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: RetroTheme.win98Gray,
-        borderRadius: BorderRadius.circular(2),
-        border: const Border(
+        border: Border(
           top: BorderSide(color: RetroTheme.win98Dark, width: 1),
           left: BorderSide(color: RetroTheme.win98Dark, width: 1),
           right: BorderSide(color: RetroTheme.win98Light, width: 1),

@@ -90,13 +90,13 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route is PageRoute<dynamic>) {
-      appRouteObserver.subscribe(this, route);
+      shopRouteObserver.subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    appRouteObserver.unsubscribe(this);
+    shopRouteObserver.unsubscribe(this);
     super.dispose();
   }
 

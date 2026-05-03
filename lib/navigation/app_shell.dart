@@ -29,7 +29,7 @@ class AppShell extends StatelessWidget {
             children: [
               Navigator(
                 key: ctrl.shopNavKey,
-                observers: [appRouteObserver],
+                observers: [shopRouteObserver],
                 onGenerateRoute: (settings) {
                   switch (settings.name) {
                     case '/product':
@@ -49,7 +49,7 @@ class AppShell extends StatelessWidget {
               ),
               Navigator(
                 key: ctrl.cartNavKey,
-                observers: [appRouteObserver],
+                observers: [cartRouteObserver],
                 onGenerateRoute: (settings) {
                   return MaterialPageRoute<void>(
                     settings: settings,
@@ -59,7 +59,7 @@ class AppShell extends StatelessWidget {
               ),
               Navigator(
                 key: ctrl.ordersNavKey,
-                observers: [appRouteObserver],
+                observers: [ordersRouteObserver],
                 onGenerateRoute: (settings) {
                   switch (settings.name) {
                     case '/order':
@@ -79,7 +79,7 @@ class AppShell extends StatelessWidget {
               ),
               Navigator(
                 key: ctrl.profileNavKey,
-                observers: [appRouteObserver],
+                observers: [profileRouteObserver],
                 onGenerateRoute: (settings) {
                   return MaterialPageRoute<void>(
                     settings: settings,
