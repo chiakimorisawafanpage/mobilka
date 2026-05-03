@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'products_seed.dart';
 import 'reviews_seed.dart';
+import 'energy_drinks_seed.dart';
 
 /// Same DDL as [src/db/schema.ts](retro-energy-shop/src/db/schema.ts).
 /// One statement per `execute` for sqflite compatibility.
@@ -21,7 +22,8 @@ CREATE TABLE IF NOT EXISTS products (
   ingredients TEXT NOT NULL,
   eraNote TEXT NOT NULL,
   imageLabel TEXT NOT NULL DEFAULT 'NO IMAGE',
-  gifUrl TEXT
+  gifUrl TEXT,
+  stock INTEGER NOT NULL DEFAULT 20
 )''');
   await db.execute('''
 CREATE TABLE IF NOT EXISTS reviews (
@@ -64,10 +66,12 @@ CREATE TABLE IF NOT EXISTS order_items (
   await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_order_items_orderId ON order_items(orderId)');
   await db.execute('''
-CREATE TABLE IF NOT EXISTS user_profile (
-  id INTEGER PRIMARY KEY CHECK (id = 1),
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  passwordHash TEXT NOT NULL,
   name TEXT NOT NULL,
-  phone TEXT NOT NULL
+  createdAt TEXT NOT NULL
 )''');
 }
 
@@ -80,8 +84,8 @@ Future<void> _seedIfEmpty(Database db) async {
     await db.transaction((txn) async {
       for (final p in productsSeed) {
         await txn.rawInsert(
-          '''INSERT INTO products (title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+          '''INSERT INTO products (title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl, stock)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
           [
             p.title,
             p.brand,
@@ -93,6 +97,27 @@ Future<void> _seedIfEmpty(Database db) async {
             p.eraNote,
             p.imageLabel,
             p.gifUrl,
+            p.stock,
+          ],
+        );
+      }
+
+      for (final p in energyDrinksSeed) {
+        await txn.rawInsert(
+          '''INSERT INTO products (title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl, stock)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+          [
+            p.title,
+            p.brand,
+            p.flavor,
+            p.volumeMl,
+            p.price,
+            p.description,
+            p.ingredients,
+            p.eraNote,
+            p.imageLabel,
+            p.gifUrl,
+            p.stock,
           ],
         );
       }
@@ -105,16 +130,7 @@ Future<void> _seedIfEmpty(Database db) async {
         );
       }
 
-      await txn.rawInsert(
-        '''INSERT OR IGNORE INTO user_profile (id, name, phone) VALUES (1, ?, ?)''',
-        ['Гость', ''],
-      );
     });
-  } else {
-    await db.execute(
-      '''INSERT OR IGNORE INTO user_profile (id, name, phone) VALUES (1, ?, ?)''',
-      ['Гость', ''],
-    );
   }
 }
 
@@ -136,7 +152,7 @@ Future<Database> openAppDatabase() async {
 
   return openDatabase(
     path,
-    version: 3,
+    version: 4,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
     },
@@ -152,6 +168,17 @@ Future<Database> openAppDatabase() async {
       }
       if (oldVersion < 3) {
         await db.execute('ALTER TABLE products ADD COLUMN gifUrl TEXT');
+      }
+      if (oldVersion < 4) {
+        await db.execute('ALTER TABLE products ADD COLUMN stock INTEGER NOT NULL DEFAULT 20');
+        await db.execute('''CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          email TEXT NOT NULL UNIQUE,
+          passwordHash TEXT NOT NULL,
+          name TEXT NOT NULL,
+          createdAt TEXT NOT NULL
+        )''');
+        await db.execute('DROP TABLE IF EXISTS user_profile');
       }
       await _backfillProductGifUrls(db);
       await _seedIfEmpty(db);

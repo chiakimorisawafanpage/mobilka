@@ -10,9 +10,7 @@ import '../theme.dart';
 import '../widgets/blink_text.dart';
 import '../widgets/geocities_badges.dart';
 import '../widgets/rainbow_divider.dart';
-import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
-import '../widgets/retro_panel.dart';
 import '../widgets/retro_select.dart';
 import '../widgets/product_thumb.dart';
 import '../widgets/retro_marquee.dart';
@@ -154,11 +152,35 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
             ),
           ),
           const RainbowDivider(),
-          RetroPanel(
-            title: 'SEARCH',
+          // Search / Filter section
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Row(
+                  children: [
+                    Icon(Icons.search, size: 18, color: RetroTheme.accentBlue),
+                    SizedBox(width: 6),
+                    Text('Search & Filter',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        )),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 RetroInput(
                   label: 'SEARCH',
                   value: _search,
@@ -205,26 +227,46 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                   options: _sortOptions,
                   onChanged: (v) => setState(() => _sort = v),
                 ),
-                Wrap(
-                  spacing: RetroSpacing.sm,
-                  runSpacing: RetroSpacing.sm,
+                const SizedBox(height: 8),
+                Row(
                   children: [
-                    RetroButton(
-                        title: 'APPLY FILTERS', onPressed: _reloadProducts),
-                    RetroButton(
-                      title: 'RESET',
-                      variant: RetroButtonVariant.link,
-                      onPressed: () {
-                        setState(() {
-                          _search = '';
-                          _brand = 'any';
-                          _flavor = 'any';
-                          _minPrice = '';
-                          _maxPrice = '';
-                          _sort = ProductSort.priceAsc;
-                        });
-                        _reloadProducts();
-                      },
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.filter_list, size: 16),
+                          label: const Text('Apply',
+                              style: TextStyle(fontWeight: FontWeight.w600)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: RetroTheme.accentBlue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
+                          ),
+                          onPressed: _reloadProducts,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      height: 40,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _search = '';
+                            _brand = 'any';
+                            _flavor = 'any';
+                            _minPrice = '';
+                            _maxPrice = '';
+                            _sort = ProductSort.priceAsc;
+                          });
+                          _reloadProducts();
+                        },
+                        child: const Text('Reset',
+                            style: TextStyle(color: RetroTheme.muted)),
+                      ),
                     ),
                   ],
                 ),
@@ -243,101 +285,162 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
           const SizedBox(height: RetroSpacing.sm),
           ..._products.map(
             (item) => Padding(
-              padding: const EdgeInsets.only(bottom: RetroSpacing.sm),
-              child: RetroPanel(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed('/product', arguments: item.id);
-                      },
+                    // Product image
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(14)),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed('/product', arguments: item.id);
+                        },
+                        child: ProductThumb(
+                            label: item.imageLabel,
+                            gifUrl: item.gifUrl,
+                            height: 120),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            item.title.toUpperCase(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'monospace',
-                              color: RetroTheme.link,
-                              decoration: TextDecoration.underline,
-                              decorationColor: RetroTheme.link,
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed('/product', arguments: item.id);
+                            },
+                            child: Text(
+                              item.title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                                color: RetroTheme.text,
+                              ),
                             ),
                           ),
-                          const SizedBox(height: RetroSpacing.xs),
-                          ProductThumb(
-                              label: item.imageLabel, gifUrl: item.gifUrl),
-                          const SizedBox(height: RetroSpacing.xs),
+                          const SizedBox(height: 4),
                           Text(
-                            '${item.brand.toUpperCase()} \u00B7 ${item.flavor.toUpperCase()} \u00B7 ${item.volumeMl} ml',
+                            '${item.brand} \u00B7 ${item.flavor} \u00B7 ${item.volumeMl} ml',
                             style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontFamily: 'monospace',
+                              fontSize: 12,
                               color: RetroTheme.muted,
                             ),
                           ),
-                          const SizedBox(height: RetroSpacing.xs),
-                          Text(
-                            '${item.price.toStringAsFixed(0)} \u20BD',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'monospace',
-                              color: RetroTheme.accentBlue,
-                            ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                '${item.price.toStringAsFixed(0)} \u20BD',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: RetroTheme.accentBlue,
+                                ),
+                              ),
+                              const Spacer(),
+                              _StockBadge(stock: item.stock),
+                            ],
                           ),
-                          const SizedBox(height: RetroSpacing.xs),
-                          Text(item.eraNote,
-                              style: const TextStyle(
-                                color: RetroTheme.muted,
-                                fontFamily: 'monospace',
-                                fontSize: 11,
-                                fontStyle: FontStyle.italic,
-                              )),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 40,
+                                  child: ElevatedButton.icon(
+                                    icon: const Icon(
+                                        Icons.add_shopping_cart_rounded,
+                                        size: 16),
+                                    label: const Text('Add to Cart',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13)),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: item.inStock
+                                          ? const Color(0xFF2E7D32)
+                                          : RetroTheme.muted,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    onPressed: item.inStock
+                                        ? () async {
+                                            try {
+                                              await addToCart(db, item.id, 1);
+                                              if (!context.mounted) return;
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Added to cart!'),
+                                                  duration: Duration(
+                                                      milliseconds: 1200),
+                                                ),
+                                              );
+                                            } catch (e) {
+                                              if (!context.mounted) return;
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text('$e'),
+                                                  backgroundColor:
+                                                      RetroTheme.danger,
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                height: 40,
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed(
+                                        '/product',
+                                        arguments: item.id);
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: RetroTheme.accentBlue,
+                                    side: const BorderSide(
+                                        color: RetroTheme.accentBlue),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text('Details',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13)),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: RetroSpacing.sm),
-                    Wrap(
-                      spacing: RetroSpacing.sm,
-                      runSpacing: RetroSpacing.sm,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        RetroButton(
-                          title: 'ADD TO CART (+1)',
-                          onPressed: () async {
-                            try {
-                              await addToCart(db, item.id, 1);
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Item added! Check CART tab.'),
-                                  duration: Duration(milliseconds: 1200),
-                                ),
-                              );
-                            } catch (e) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Error: $e'),
-                                  backgroundColor: RetroTheme.danger,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        RetroButton(
-                          title: 'DETAILS',
-                          variant: RetroButtonVariant.link,
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed('/product', arguments: item.id);
-                          },
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -353,6 +456,44 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
           const SizedBox(height: RetroSpacing.lg),
         ],
       ),
+    );
+  }
+}
+
+class _StockBadge extends StatelessWidget {
+  const _StockBadge({required this.stock});
+  final int stock;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color bg;
+    final Color fg;
+    final String text;
+    if (stock <= 0) {
+      bg = const Color(0xFFFFEBEE);
+      fg = RetroTheme.danger;
+      text = 'Out of stock';
+    } else if (stock <= 5) {
+      bg = const Color(0xFFFFF3E0);
+      fg = const Color(0xFFE65100);
+      text = 'Only $stock left';
+    } else {
+      bg = const Color(0xFFE8F5E9);
+      fg = const Color(0xFF2E7D32);
+      text = 'In stock';
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(text,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: fg,
+          )),
     );
   }
 }

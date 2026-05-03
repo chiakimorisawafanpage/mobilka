@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'db/app_database.dart';
+import 'db/auth_repo.dart';
 import 'navigation/app_shell.dart';
 import 'navigation/app_shell_controller.dart';
 import 'theme.dart';
@@ -32,6 +33,7 @@ class RetroEnergyApp extends StatelessWidget {
         Provider<Database>.value(value: database),
         ChangeNotifierProvider<AppShellController>(
             create: (_) => AppShellController()),
+        ChangeNotifierProvider<AuthState>(create: (_) => AuthState()),
       ],
       child: MaterialApp(
         title: 'Retro Energy Shop',
