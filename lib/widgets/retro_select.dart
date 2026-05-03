@@ -42,7 +42,7 @@ class RetroSelect<T> extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontFamily: 'monospace',
-              color: RetroTheme.accentCyan,
+              color: RetroTheme.bloodRed,
               fontSize: 12,
             ),
           ),
@@ -56,16 +56,16 @@ class RetroSelect<T> extends StatelessWidget {
                   return AlertDialog(
                     backgroundColor: RetroTheme.bg,
                     shape: const RoundedRectangleBorder(
-                      side:
-                          BorderSide(color: RetroTheme.accentBlue, width: 3),
+                      side: BorderSide(
+                          color: RetroTheme.darkRed, width: 3),
                       borderRadius: BorderRadius.zero,
                     ),
                     title: const Text(
-                      '\u2605 SELECT \u2605',
+                      '\u2620 SELECT \u2620',
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
                         fontFamily: 'monospace',
-                        color: RetroTheme.accentYellow,
+                        color: RetroTheme.bloodRed,
                       ),
                     ),
                     content: SizedBox(
@@ -87,19 +87,21 @@ class RetroSelect<T> extends StatelessWidget {
                                   },
                                   child: Container(
                                     width: double.infinity,
-                                    padding:
-                                        const EdgeInsets.all(RetroSpacing.sm),
+                                    padding: const EdgeInsets.all(
+                                        RetroSpacing.sm),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: RetroTheme.border, width: 2),
+                                          color: RetroTheme.border,
+                                          width: 2),
                                     ),
                                     child: Text(
                                       '> ${o.label}',
                                       style: const TextStyle(
-                                        color: RetroTheme.link,
+                                        color: RetroTheme.bloodRed,
                                         fontWeight: FontWeight.w800,
                                         fontFamily: 'monospace',
-                                        decoration: TextDecoration.underline,
+                                        decoration:
+                                            TextDecoration.underline,
                                       ),
                                     ),
                                   ),
@@ -141,7 +143,7 @@ class RetroSelect<T> extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
                         fontFamily: 'monospace',
-                        color: RetroTheme.accentCyan,
+                        color: RetroTheme.bloodRed,
                       )),
                 ],
               ),

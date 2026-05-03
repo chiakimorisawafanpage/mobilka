@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../theme.dart';
 
@@ -10,43 +9,43 @@ class RetroInput extends StatefulWidget {
     required this.value,
     required this.onChanged,
     this.placeholder,
+    this.keyboardType,
     this.multiline = false,
-    this.keyboardType = TextInputType.text,
+    this.obscureText = false,
   });
 
   final String label;
   final String value;
   final ValueChanged<String> onChanged;
   final String? placeholder;
+  final TextInputType? keyboardType;
   final bool multiline;
-  final TextInputType keyboardType;
+  final bool obscureText;
 
   @override
   State<RetroInput> createState() => _RetroInputState();
 }
 
 class _RetroInputState extends State<RetroInput> {
-  late final TextEditingController _controller;
+  late final TextEditingController _ctrl;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.value);
+    _ctrl = TextEditingController(text: widget.value);
   }
 
   @override
-  void didUpdateWidget(RetroInput oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.value != _controller.text) {
-      _controller.text = widget.value;
-      _controller.selection =
-          TextSelection.collapsed(offset: _controller.text.length);
+  void didUpdateWidget(RetroInput old) {
+    super.didUpdateWidget(old);
+    if (old.value != widget.value && _ctrl.text != widget.value) {
+      _ctrl.text = widget.value;
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
@@ -62,55 +61,50 @@ class _RetroInputState extends State<RetroInput> {
             style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontFamily: 'monospace',
-              color: RetroTheme.accentCyan,
+              color: RetroTheme.bloodRed,
               fontSize: 12,
             ),
           ),
           const SizedBox(height: RetroSpacing.xs),
           TextField(
-            controller: _controller,
+            controller: _ctrl,
             onChanged: widget.onChanged,
-            decoration: InputDecoration(
-              hintText: widget.placeholder,
-              hintStyle: TextStyle(
-                color: RetroTheme.text.withValues(alpha: 0.4),
-                fontFamily: 'monospace',
-                fontSize: 13,
-              ),
-              isDense: true,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: RetroSpacing.sm,
-                vertical: RetroSpacing.sm,
-              ),
-              border: const OutlineInputBorder(
-                borderSide: BorderSide(color: RetroTheme.accentBlue, width: 2),
-                borderRadius: BorderRadius.zero,
-              ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: RetroTheme.border, width: 2),
-                borderRadius: BorderRadius.zero,
-              ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: RetroTheme.accentCyan, width: 2),
-                borderRadius: BorderRadius.zero,
-              ),
-              filled: true,
-              fillColor: const Color(0xFF000000),
-            ),
+            keyboardType: widget.multiline
+                ? TextInputType.multiline
+                : widget.keyboardType,
+            maxLines: widget.multiline ? 4 : 1,
+            obscureText: widget.obscureText,
+            cursorColor: RetroTheme.bloodRed,
             style: const TextStyle(
               color: RetroTheme.text,
               fontFamily: 'monospace',
               fontSize: 14,
             ),
-            cursorColor: RetroTheme.text,
-            maxLines: widget.multiline ? 5 : 1,
-            minLines: widget.multiline ? 3 : 1,
-            keyboardType: widget.multiline
-                ? TextInputType.multiline
-                : widget.keyboardType,
-            inputFormatters: widget.keyboardType == TextInputType.number
-                ? [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))]
-                : null,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: widget.placeholder,
+              hintStyle: TextStyle(
+                color: RetroTheme.text.withValues(alpha: 0.3),
+                fontFamily: 'monospace',
+                fontSize: 14,
+              ),
+              filled: true,
+              fillColor: const Color(0xFF000000),
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: RetroSpacing.sm, vertical: RetroSpacing.sm),
+              border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.zero,
+                  borderSide:
+                      BorderSide(color: RetroTheme.border, width: 2)),
+              enabledBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.zero,
+                  borderSide:
+                      BorderSide(color: RetroTheme.border, width: 2)),
+              focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.zero,
+                  borderSide:
+                      BorderSide(color: RetroTheme.bloodRed, width: 2)),
+            ),
           ),
         ],
       ),

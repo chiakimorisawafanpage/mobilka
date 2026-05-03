@@ -60,12 +60,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final db = context.read<Database>();
 
     return Scaffold(
-      appBar: retroAppBar('\u2605 CHECKOUT \u2605'),
+      appBar: retroAppBar('CHECKOUT'),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: '\u2605 CHECKOUT (local) \u2605',
+            title: 'CHECKOUT (local)',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -74,7 +74,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.accentYellow,
+                    color: RetroTheme.boneWhite,
                     fontSize: 16,
                   ),
                 ),
@@ -103,7 +103,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     variant: RetroButtonVariant.link,
                     onPressed: _reload),
                 RetroButton(
-                  title: 'CONFIRM ORDER >>',
+                  title: 'CONFIRM ORDER \u00BB',
                   disabled: _lines.isEmpty || _isSubmitting,
                   onPressed: () async {
                     if (_lines.isEmpty) {
@@ -168,7 +168,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
           const RainbowDivider(height: 2),
           RetroPanel(
-            title: '\u2605 CART CONTENTS \u2605',
+            title: 'CART CONTENTS',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

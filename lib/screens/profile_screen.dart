@@ -22,7 +22,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name = '';
   String _phone = '';
 
-  Future<void> _reload() async {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  Future<void> _load() async {
     final db = context.read<Database>();
     final p = await getProfile(db);
     if (!mounted) return;
@@ -32,72 +38,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _reload());
+  Future<void> _save() async {
+    final db = context.read<Database>();
+    await upsertProfile(db, UserProfile(name: _name, phone: _phone));
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Profile saved.'),
+        duration: Duration(milliseconds: 1200),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final db = context.read<Database>();
-
     return Scaffold(
-      appBar: retroAppBar('\u2605 PROFILE \u2605',
-          automaticallyImplyLeading: false),
+      appBar: retroAppBar('PROFILE', automaticallyImplyLeading: false),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: '\u2605 MY HOMEPAGE \u2605',
+            title: 'MY DARK HOMEPAGE',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Welcome to my personal page!\nThis is not an account. Just a row in SQLite.',
+                  'Welcome, wanderer, to your profile.\nFeel free to visit all my cave then\ntell me what you like and what not.',
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'monospace',
                     color: RetroTheme.text,
-                    height: 1.5,
+                    fontFamily: 'monospace',
+                    height: 1.6,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 const RainbowDivider(height: 2),
                 RetroInput(
-                    label: 'NAME',
-                    value: _name,
-                    onChanged: (t) => setState(() => _name = t)),
+                  label: 'NAME',
+                  value: _name,
+                  onChanged: (t) => setState(() => _name = t),
+                  placeholder: 'Your name...',
+                ),
                 RetroInput(
                   label: 'PHONE',
                   value: _phone,
                   onChanged: (t) => setState(() => _phone = t),
                   keyboardType: TextInputType.phone,
+                  placeholder: '+7...',
                 ),
-                RetroButton(
-                  title: 'SAVE',
-                  onPressed: () async {
-                    await upsertProfile(
-                        db, UserProfile(name: _name, phone: _phone));
-                    if (!context.mounted) return;
-                    await showDialog<void>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: const Text('OK'),
-                        content: const Text('Saved!'),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(ctx),
-                              child: const Text('OK')),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: RetroSpacing.sm),
-                RetroButton(
-                  title: 'RELOAD',
-                  variant: RetroButtonVariant.link,
-                  onPressed: _reload,
+                Wrap(
+                  spacing: RetroSpacing.sm,
+                  runSpacing: RetroSpacing.sm,
+                  children: [
+                    RetroButton(title: 'SAVE', onPressed: _save),
+                    RetroButton(
+                      title: 'RELOAD',
+                      variant: RetroButtonVariant.link,
+                      onPressed: _load,
+                    ),
+                  ],
                 ),
               ],
             ),

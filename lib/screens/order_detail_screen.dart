@@ -21,23 +21,23 @@ class OrderDetailScreen extends StatefulWidget {
 
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   OrderHeader? _order;
-  List<OrderLine> _lines = [];
-
-  Future<void> _reload() async {
-    final db = context.read<Database>();
-    final o = await getOrder(db, widget.orderId);
-    final l = await getOrderLines(db, widget.orderId);
-    if (!mounted) return;
-    setState(() {
-      _order = o;
-      _lines = l;
-    });
-  }
+  List<OrderLine> _items = [];
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _reload());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  Future<void> _load() async {
+    final db = context.read<Database>();
+    final o = await getOrder(db, widget.orderId);
+    final li = await getOrderLines(db, widget.orderId);
+    if (!mounted) return;
+    setState(() {
+      _order = o;
+      _items = li;
+    });
   }
 
   @override
@@ -53,42 +53,79 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontFamily: 'monospace',
-                  color: RetroTheme.text,
+                  color: RetroTheme.bloodRed,
                 ))),
       );
     }
 
     return Scaffold(
-      appBar: retroAppBar('ORDER'),
+      appBar: retroAppBar('ORDER #${order.id}'),
       body: ListView(
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: '\u2605 ORDER #${order.id} \u2605',
+            title: 'ORDER DETAILS',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _infoRow('STATUS', order.status.dbValue.toUpperCase()),
+                Text(
+                  'STATUS: ${order.status.dbValue.toUpperCase()}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.bloodRed,
+                  ),
+                ),
                 const SizedBox(height: RetroSpacing.xs),
-                _infoRow('TOTAL', '${order.total.toStringAsFixed(0)} \u20BD'),
+                Text(
+                  'TOTAL: ${order.total.toStringAsFixed(0)} \u20BD',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.boneWhite,
+                  ),
+                ),
                 const SizedBox(height: RetroSpacing.xs),
-                _infoRow(
-                    'PAYMENT', order.paymentMethod.dbValue.toUpperCase()),
-                const SizedBox(height: RetroSpacing.xs),
-                _infoRow('DATE', order.createdAt),
-                const SizedBox(height: RetroSpacing.xs),
-                _infoRow('ADDRESS', order.address),
-                if (order.comment != null &&
-                    order.comment!.isNotEmpty) ...[
-                  const SizedBox(height: RetroSpacing.xs),
-                  _infoRow('COMMENT', order.comment!),
-                ],
+                Text(
+                  'PAYMENT: ${order.paymentMethod.name.toUpperCase()}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.text,
+                  ),
+                ),
+                Text(
+                  'DATE: ${order.createdAt}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.text,
+                  ),
+                ),
+                Text(
+                  'ADDRESS: ${order.address}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                    color: RetroTheme.text,
+                  ),
+                ),
+                if (order.comment != null && order.comment!.isNotEmpty)
+                  Text(
+                    'COMMENT: ${order.comment!}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'monospace',
+                      color: RetroTheme.text,
+                    ),
+                  ),
                 const SizedBox(height: RetroSpacing.sm),
                 RetroButton(
                   title: 'SIMULATE: NEXT STATUS',
                   onPressed: () async {
-                    await advanceOrderStatus(db, order.id);
-                    await _reload();
+                    final next = await advanceOrderStatus(db, widget.orderId);
+                    if (!mounted) return;
+                    setState(() => _order = next);
                   },
                 ),
               ],
@@ -96,19 +133,42 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ),
           const RainbowDivider(height: 2),
           RetroPanel(
-            title: '\u2605 ORDER ITEMS \u2605',
+            title: 'ORDER ITEMS',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ..._lines.map(
-                  (l) => Padding(
-                    padding: const EdgeInsets.only(top: RetroSpacing.xs),
-                    child: Text(
-                      '> ${l.title} x${l.qty} @ ${l.priceAtPurchase.toStringAsFixed(0)} \u20BD = ${(l.qty * l.priceAtPurchase).toStringAsFixed(0)} \u20BD',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'monospace',
-                        color: RetroTheme.text,
+                ..._items.map(
+                  (item) => Padding(
+                    padding: const EdgeInsets.only(bottom: RetroSpacing.sm),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(RetroSpacing.sm),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF000000),
+                        border:
+                            Border.all(color: RetroTheme.border, width: 2),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.title.toUpperCase(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.boneWhite,
+                            ),
+                          ),
+                          const SizedBox(height: RetroSpacing.xs),
+                          Text(
+                            '${item.qty} x ${item.priceAtPurchase.toStringAsFixed(0)} \u20BD = ${(item.qty * item.priceAtPurchase).toStringAsFixed(0)} \u20BD',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'monospace',
+                              color: RetroTheme.text,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -117,26 +177,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             ),
           ),
           const SizedBox(height: RetroSpacing.lg),
-        ],
-      ),
-    );
-  }
-
-  Widget _infoRow(String label, String value) {
-    return Text.rich(
-      TextSpan(
-        style: const TextStyle(
-          color: RetroTheme.text,
-          fontFamily: 'monospace',
-        ),
-        children: [
-          TextSpan(
-              text: '$label: ',
-              style: const TextStyle(
-                fontWeight: FontWeight.w900,
-                color: RetroTheme.accentCyan,
-              )),
-          TextSpan(text: value),
         ],
       ),
     );

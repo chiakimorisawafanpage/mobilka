@@ -32,7 +32,7 @@ class ProductThumb extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: RetroTheme.accentBlue.withValues(alpha: 0.3),
+            color: RetroTheme.bloodRed.withValues(alpha: 0.2),
             offset: const Offset(0, 0),
             blurRadius: 6,
           ),
@@ -50,7 +50,7 @@ class ProductThumb extends StatelessWidget {
               loadingBuilder: (context, child, progress) {
                 if (progress == null) return child;
                 return Container(
-                  color: const Color(0xFF000011),
+                  color: const Color(0xFF0A0000),
                   alignment: Alignment.center,
                   child: const Text(
                     'LOADING...',
@@ -58,7 +58,7 @@ class ProductThumb extends StatelessWidget {
                       fontWeight: FontWeight.w900,
                       fontFamily: 'monospace',
                       fontSize: 11,
-                      color: RetroTheme.text,
+                      color: RetroTheme.bloodRed,
                     ),
                   ),
                 );
@@ -80,7 +80,7 @@ class ProductThumb extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   fontFamily: 'monospace',
                   fontSize: 10,
-                  color: RetroTheme.accentYellow,
+                  color: RetroTheme.bloodRed,
                 ),
               ),
             ),
@@ -93,12 +93,12 @@ class ProductThumb extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: RetroSpacing.xs, vertical: 2),
               child: const Text(
-                'Y2K',
+                '\u2620',
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontFamily: 'monospace',
                   fontSize: 9,
-                  color: RetroTheme.accentPink,
+                  color: RetroTheme.bloodRed,
                 ),
               ),
             ),
@@ -110,14 +110,14 @@ class ProductThumb extends StatelessWidget {
 
   Widget _fallbackLabel(String text) {
     return Container(
-      color: const Color(0xFF000011),
+      color: const Color(0xFF0A0000),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: RetroSpacing.sm),
       child: Text(
         text,
         textAlign: TextAlign.center,
         style: const TextStyle(
-          color: RetroTheme.accentCyan,
+          color: RetroTheme.boneWhite,
           fontWeight: FontWeight.w900,
           fontFamily: 'monospace',
           letterSpacing: 0.6,

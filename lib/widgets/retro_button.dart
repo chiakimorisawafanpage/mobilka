@@ -20,74 +20,64 @@ class RetroButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLink = variant == RetroButtonVariant.link;
-    final isDanger = variant == RetroButtonVariant.danger;
-
-    if (isLink) {
-      return TextButton(
-        onPressed: disabled ? null : onPressed,
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-              vertical: RetroSpacing.xs, horizontal: 0),
-          foregroundColor: RetroTheme.link,
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'monospace',
-            decoration: TextDecoration.underline,
+    if (variant == RetroButtonVariant.link) {
+      return GestureDetector(
+        onTap: disabled ? null : onPressed,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            '\u00BB $title',
+            style: TextStyle(
+              color: disabled
+                  ? RetroTheme.muted
+                  : RetroTheme.bloodRed,
+              fontWeight: FontWeight.w800,
+              fontFamily: 'monospace',
+              fontSize: 12,
+              decoration: TextDecoration.underline,
+              decorationColor: RetroTheme.bloodRed,
+            ),
           ),
         ),
-        child: Text('>> $title <<'),
       );
     }
 
-    return Opacity(
-      opacity: disabled ? 0.45 : 1,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: disabled ? null : onPressed,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-                vertical: RetroSpacing.sm, horizontal: RetroSpacing.md),
-            decoration: BoxDecoration(
-              color: isDanger
-                  ? const Color(0xFF330000)
-                  : RetroTheme.win98Gray,
-              border: Border(
-                top: BorderSide(
-                  color: isDanger
-                      ? const Color(0xFFFF6666)
-                      : RetroTheme.win98Light,
-                  width: 2,
-                ),
-                left: BorderSide(
-                  color: isDanger
-                      ? const Color(0xFFFF6666)
-                      : RetroTheme.win98Light,
-                  width: 2,
-                ),
-                right: BorderSide(
-                  color: isDanger
-                      ? const Color(0xFF660000)
-                      : RetroTheme.win98Darkest,
-                  width: 2,
-                ),
-                bottom: BorderSide(
-                  color: isDanger
-                      ? const Color(0xFF660000)
-                      : RetroTheme.win98Darkest,
-                  width: 2,
-                ),
-              ),
+    final isDanger = variant == RetroButtonVariant.danger;
+    final bgColor = isDanger
+        ? RetroTheme.darkRed
+        : RetroTheme.win98Gray;
+    final lightBorder = isDanger
+        ? RetroTheme.bloodRed
+        : RetroTheme.win98Light;
+    final darkBorder = isDanger
+        ? const Color(0xFF330000)
+        : RetroTheme.win98Darkest;
+    final textColor = isDanger
+        ? RetroTheme.boneWhite
+        : const Color(0xFF000000);
+
+    return GestureDetector(
+      onTap: disabled ? null : onPressed,
+      child: Opacity(
+        opacity: disabled ? 0.45 : 1.0,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: bgColor,
+            border: Border(
+              top: BorderSide(color: lightBorder, width: 2),
+              left: BorderSide(color: lightBorder, width: 2),
+              right: BorderSide(color: darkBorder, width: 2),
+              bottom: BorderSide(color: darkBorder, width: 2),
             ),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontFamily: 'monospace',
-                fontSize: 12,
-                color: isDanger ? RetroTheme.danger : const Color(0xFF000000),
-              ),
+          ),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w900,
+              fontFamily: 'monospace',
+              fontSize: 12,
+              color: textColor,
             ),
           ),
         ),

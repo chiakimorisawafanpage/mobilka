@@ -81,15 +81,14 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
     final db = context.read<Database>();
 
     return Scaffold(
-      appBar:
-          retroAppBar('\u2605 CART \u2605', automaticallyImplyLeading: false),
+      appBar: retroAppBar('CART', automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RetroPanel(
-              title: '\u2605 YOUR CART \u2605',
+              title: 'YOUR CART',
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -98,13 +97,13 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontFamily: 'monospace',
-                      color: RetroTheme.accentYellow,
+                      color: RetroTheme.boneWhite,
                       fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: RetroSpacing.sm),
                   RetroButton(
-                    title: 'CHECKOUT >>',
+                    title: 'CHECKOUT \u00BB',
                     disabled: _lines.isEmpty,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push<void>(
@@ -130,7 +129,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
             Expanded(
               child: _lines.isEmpty
                   ? const Text(
-                      'EMPTY. Like an old site with no content.',
+                      'EMPTY. Nothing but shadows here.',
                       style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontFamily: 'monospace',
@@ -152,7 +151,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontFamily: 'monospace',
-                                  color: RetroTheme.accentYellow,
+                                  color: RetroTheme.boneWhite,
                                 ),
                               ),
                               const SizedBox(height: RetroSpacing.xs),
@@ -175,7 +174,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontFamily: 'monospace',
-                                  color: RetroTheme.accentYellow,
+                                  color: RetroTheme.boneWhite,
                                 ),
                               ),
                               const SizedBox(height: RetroSpacing.sm),

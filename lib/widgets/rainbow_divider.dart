@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme.dart';
+
 class RainbowDivider extends StatelessWidget {
   const RainbowDivider({super.key, this.height = 4});
 
@@ -13,13 +15,11 @@ class RainbowDivider extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFFFF0000),
-            Color(0xFFFF8800),
-            Color(0xFFFFFF00),
-            Color(0xFF00FF00),
-            Color(0xFF00FFFF),
-            Color(0xFF0000FF),
-            Color(0xFFFF00FF),
+            Color(0xFF330000),
+            RetroTheme.bloodRed,
+            Color(0xFF660000),
+            RetroTheme.bloodRed,
+            Color(0xFF330000),
           ],
         ),
       ),
