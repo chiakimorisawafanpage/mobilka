@@ -7,7 +7,7 @@ class ProductThumb extends StatelessWidget {
     super.key,
     required this.label,
     this.gifUrl,
-    this.height = 92,
+    this.height = 90,
   });
 
   final String label;
@@ -16,89 +16,47 @@ class ProductThumb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = gifUrl?.trim();
-    final hasUrl = url != null && url.isNotEmpty;
-
     return Container(
-      width: double.infinity,
       height: height,
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: const Color(0xFFF5F5F0),
+        borderRadius: BorderRadius.circular(3),
         border: const Border(
-          top: BorderSide(color: RetroTheme.win98Dark, width: 2),
-          left: BorderSide(color: RetroTheme.win98Dark, width: 2),
-          right: BorderSide(color: RetroTheme.win98Light, width: 2),
-          bottom: BorderSide(color: RetroTheme.win98Light, width: 2),
+          top: BorderSide(color: RetroTheme.win98Dark, width: 1),
+          left: BorderSide(color: RetroTheme.win98Dark, width: 1),
+          right: BorderSide(color: RetroTheme.win98Light, width: 1),
+          bottom: BorderSide(color: RetroTheme.win98Light, width: 1),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: RetroTheme.bloodRed.withValues(alpha: 0.2),
-            offset: const Offset(0, 0),
-            blurRadius: 6,
-          ),
-        ],
       ),
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (hasUrl)
+          if (gifUrl != null)
             Image.network(
-              url,
+              gifUrl!,
               fit: BoxFit.cover,
-              filterQuality: FilterQuality.none,
-              loadingBuilder: (context, child, progress) {
-                if (progress == null) return child;
-                return Container(
-                  color: const Color(0xFF0A0000),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'LOADING...',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'monospace',
-                      fontSize: 11,
-                      color: RetroTheme.bloodRed,
-                    ),
-                  ),
-                );
-              },
-              errorBuilder: (_, __, ___) => _fallbackLabel(label),
+              errorBuilder: (_, __, ___) => _fallback(),
             )
           else
-            _fallbackLabel(label),
+            _fallback(),
           Positioned(
-            left: 0,
-            top: 0,
+            bottom: 2,
+            right: 2,
             child: Container(
-              color: RetroTheme.accentBg,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: RetroSpacing.xs, vertical: 2),
-              child: Text(
-                hasUrl ? 'GIF' : 'IMG',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  fontSize: 10,
-                  color: RetroTheme.bloodRed,
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+              decoration: BoxDecoration(
+                color: RetroTheme.win98Gray.withValues(alpha: 0.85),
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: RetroTheme.border, width: 0.5),
               ),
-            ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: Container(
-              color: const Color(0x88000000),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: RetroSpacing.xs, vertical: 2),
-              child: const Text(
-                '\u2620',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
+              child: Text(
+                label,
+                style: const TextStyle(
                   fontFamily: 'monospace',
-                  fontSize: 9,
-                  color: RetroTheme.bloodRed,
+                  fontSize: 8,
+                  fontWeight: FontWeight.w700,
+                  color: RetroTheme.muted,
                 ),
               ),
             ),
@@ -108,20 +66,15 @@ class ProductThumb extends StatelessWidget {
     );
   }
 
-  Widget _fallbackLabel(String text) {
-    return Container(
-      color: const Color(0xFF0A0000),
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: RetroSpacing.sm),
+  Widget _fallback() {
+    return Center(
       child: Text(
-        text,
-        textAlign: TextAlign.center,
+        label,
         style: const TextStyle(
-          color: RetroTheme.boneWhite,
-          fontWeight: FontWeight.w900,
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
           fontFamily: 'monospace',
-          letterSpacing: 0.6,
-          fontSize: 12,
+          color: RetroTheme.muted,
         ),
       ),
     );

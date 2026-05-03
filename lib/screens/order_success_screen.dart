@@ -52,22 +52,12 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const BlinkText(
-                text: '\u2620\u2620\u2620 IT IS DONE \u2620\u2620\u2620',
+                text: '\u2605\u2605\u2605 THANK YOU! \u2605\u2605\u2605',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
                   fontFamily: 'monospace',
-                  color: RetroTheme.bloodRed,
-                  shadows: [
-                    Shadow(
-                        offset: Offset(2, 2),
-                        color: Color(0xFF000000),
-                        blurRadius: 0),
-                    Shadow(
-                        offset: Offset(0, 0),
-                        color: Color(0xFFFF0000),
-                        blurRadius: 8),
-                  ],
+                  color: RetroTheme.accentBlue,
                 ),
               ),
               const RainbowDivider(height: 2),
@@ -90,14 +80,14 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                           text: order.status.dbValue,
                           style: const TextStyle(
                             fontWeight: FontWeight.w900,
-                            color: RetroTheme.bloodRed,
+                            color: RetroTheme.accentBlue,
                           )),
                       const TextSpan(text: ' \u00B7 Total: '),
                       TextSpan(
                         text: order.total.toStringAsFixed(0),
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
-                          color: RetroTheme.boneWhite,
+                          color: RetroTheme.accentBlue,
                         ),
                       ),
                       const TextSpan(text: ' \u20BD'),
@@ -107,7 +97,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
               else
                 const Text('Loading status...',
                     style: TextStyle(
-                      color: RetroTheme.text,
+                      color: RetroTheme.muted,
                       fontFamily: 'monospace',
                     )),
               const SizedBox(height: RetroSpacing.sm),

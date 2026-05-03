@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BlinkText extends StatefulWidget {
-  const BlinkText({super.key, required this.text, required this.style});
+  const BlinkText({super.key, required this.text, this.style});
 
   final String text;
-  final TextStyle style;
+  final TextStyle? style;
 
   @override
   State<BlinkText> createState() => _BlinkTextState();
@@ -19,7 +19,7 @@ class _BlinkTextState extends State<BlinkText>
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
   }
 
@@ -31,14 +31,9 @@ class _BlinkTextState extends State<BlinkText>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _ctrl,
-      builder: (context, _) {
-        return Opacity(
-          opacity: _ctrl.value < 0.5 ? 0.0 : 1.0,
-          child: Text(widget.text, style: widget.style),
-        );
-      },
+    return FadeTransition(
+      opacity: _ctrl,
+      child: Text(widget.text, style: widget.style),
     );
   }
 }

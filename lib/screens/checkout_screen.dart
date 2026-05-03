@@ -74,7 +74,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.boneWhite,
+                    color: RetroTheme.accentBlue,
                     fontSize: 16,
                   ),
                 ),
@@ -175,7 +175,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 if (_lines.isEmpty)
                   const Text('Cart is empty.',
                       style: TextStyle(
-                        color: RetroTheme.text,
+                        color: RetroTheme.muted,
                         fontFamily: 'monospace',
                       )),
                 ..._lines.map(

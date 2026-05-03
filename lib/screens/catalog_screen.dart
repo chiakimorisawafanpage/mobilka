@@ -137,25 +137,25 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
         children: [
           const RetroMarquee(
             text:
-                '\u2620 WELCOME TO THE DARK ENERGY SHOP \u2620 BEWARE \u2620 ENTER AT YOUR OWN RISK \u2620',
+                'Welcome to Retro Energy Shop \u2022 Best prices \u2022 Fast delivery',
           ),
           const SizedBox(height: RetroSpacing.sm),
           const Center(child: GeocitiesUnderConstruction()),
           const SizedBox(height: RetroSpacing.sm),
           const Center(
             child: BlinkText(
-              text: '\u2620\u2620\u2620 NEW ITEMS ADDED \u2620\u2620\u2620',
+              text: '\u2605\u2605\u2605 NEW ITEMS ADDED \u2605\u2605\u2605',
               style: TextStyle(
                 fontFamily: 'monospace',
                 fontWeight: FontWeight.w900,
                 fontSize: 14,
-                color: RetroTheme.bloodRed,
+                color: RetroTheme.accentBlue,
               ),
             ),
           ),
           const RainbowDivider(),
           RetroPanel(
-            title: 'SEARCH THE DARKNESS',
+            title: 'SEARCH',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -233,17 +233,11 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
           ),
           const RainbowDivider(),
           Text(
-            '\u2620 PRODUCTS (${_products.length}) \u2620',
+            'PRODUCTS (${_products.length})',
             style: const TextStyle(
               fontWeight: FontWeight.w900,
               fontFamily: 'monospace',
-              color: RetroTheme.bloodRed,
-              shadows: [
-                Shadow(
-                    offset: Offset(1, 1),
-                    color: Color(0xFF000000),
-                    blurRadius: 0),
-              ],
+              color: RetroTheme.text,
             ),
           ),
           const SizedBox(height: RetroSpacing.sm),
@@ -267,8 +261,9 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.bloodRed,
+                              color: RetroTheme.link,
                               decoration: TextDecoration.underline,
+                              decorationColor: RetroTheme.link,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
@@ -290,19 +285,13 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                               fontSize: 20,
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.boneWhite,
-                              shadows: [
-                                Shadow(
-                                    offset: Offset(1, 1),
-                                    color: Color(0xFFCC0000),
-                                    blurRadius: 0),
-                              ],
+                              color: RetroTheme.accentBlue,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
                           Text(item.eraNote,
                               style: const TextStyle(
-                                color: RetroTheme.silver,
+                                color: RetroTheme.muted,
                                 fontFamily: 'monospace',
                                 fontSize: 11,
                                 fontStyle: FontStyle.italic,

@@ -91,114 +91,9 @@ class AppShell extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: _GothicNavBar(
+      bottomNavigationBar: _WinTaskbar(
         currentIndex: ctrl.tab,
         onTap: context.read<AppShellController>().setTab,
-      ),
-    );
-  }
-}
-
-class _GothicNavBar extends StatelessWidget {
-  const _GothicNavBar({
-    required this.currentIndex,
-    required this.onTap,
-  });
-
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    const items = [
-      _NavItem(icon: Icons.storefront, label: 'SHOP'),
-      _NavItem(icon: Icons.shopping_cart, label: 'CART'),
-      _NavItem(icon: Icons.receipt_long, label: 'ORDERS'),
-      _NavItem(icon: Icons.person, label: 'PROFILE'),
-    ];
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF050505),
-        border: Border(
-          top: BorderSide(color: RetroTheme.darkRed, width: 2),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: List.generate(items.length, (i) {
-            final selected = i == currentIndex;
-            final item = items[i];
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => onTap(i),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    gradient: selected
-                        ? const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xFF1A0000),
-                              Color(0xFF000000),
-                            ],
-                          )
-                        : null,
-                    border: Border(
-                      left: i > 0
-                          ? BorderSide(
-                              color:
-                                  RetroTheme.border.withValues(alpha: 0.3),
-                              width: 1)
-                          : BorderSide.none,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        item.icon,
-                        size: 22,
-                        color: selected
-                            ? RetroTheme.bloodRed
-                            : RetroTheme.silver,
-                        shadows: selected
-                            ? const [
-                                Shadow(
-                                    color: Color(0xFFFF0000),
-                                    blurRadius: 8),
-                              ]
-                            : null,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        item.label,
-                        style: TextStyle(
-                          fontFamily: 'monospace',
-                          fontWeight: FontWeight.w900,
-                          fontSize: 9,
-                          letterSpacing: 1.0,
-                          color: selected
-                              ? RetroTheme.bloodRed
-                              : RetroTheme.silver,
-                          shadows: selected
-                              ? const [
-                                  Shadow(
-                                      color: Color(0xFFFF0000),
-                                      blurRadius: 6),
-                                ]
-                              : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
       ),
     );
   }
@@ -208,4 +103,92 @@ class _NavItem {
   const _NavItem({required this.icon, required this.label});
   final IconData icon;
   final String label;
+}
+
+class _WinTaskbar extends StatelessWidget {
+  const _WinTaskbar({required this.currentIndex, required this.onTap});
+
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  static const _items = [
+    _NavItem(icon: Icons.storefront, label: 'Shop'),
+    _NavItem(icon: Icons.shopping_cart, label: 'Cart'),
+    _NavItem(icon: Icons.receipt_long, label: 'Orders'),
+    _NavItem(icon: Icons.person, label: 'Profile'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: RetroTheme.win98Gray,
+        border: Border(
+          top: BorderSide(color: RetroTheme.win98Light, width: 1),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x10000000),
+            offset: Offset(0, -1),
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 48,
+          child: Row(
+            children: List.generate(_items.length, (i) {
+              final item = _items[i];
+              final selected = i == currentIndex;
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => onTap(i),
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: selected ? RetroTheme.panel : Colors.transparent,
+                      border: selected
+                          ? const Border(
+                              top: BorderSide(
+                                  color: RetroTheme.accentBlue, width: 2),
+                            )
+                          : null,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          item.icon,
+                          size: 18,
+                          color: selected
+                              ? RetroTheme.accentBlue
+                              : RetroTheme.muted,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 9,
+                            fontWeight: selected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
+                            color: selected
+                                ? RetroTheme.accentBlue
+                                : RetroTheme.muted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
 }

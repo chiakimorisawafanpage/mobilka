@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 
 abstract final class RetroTheme {
-  // --- Gothic Horror palette ---
-  static const Color bg = Color(0xFF000000);
-  static const Color panel = Color(0xFF0D0D0D);
-  static const Color text = Color(0xFFAAAAAA);
-  static const Color muted = Color(0xFF666666);
-  static const Color border = Color(0xFF333333);
-  static const Color link = Color(0xFFCC0000);
-  static const Color danger = Color(0xFFFF0000);
-  static const Color accentBg = Color(0xFF1A0000);
-  static const Color accentBlue = Color(0xFF444444);
-  static const Color accentPink = Color(0xFFCC0000);
-  static const Color accentYellow = Color(0xFFCC0000);
-  static const Color accentCyan = Color(0xFF888888);
-  static const Color silver = Color(0xFF999999);
-  static const Color win98Gray = Color(0xFF555555);
-  static const Color win98Light = Color(0xFF777777);
-  static const Color win98Dark = Color(0xFF333333);
-  static const Color win98Darkest = Color(0xFF1A1A1A);
-  static const Color starWhite = Color(0xFFFFFFFF);
-  static const Color bloodRed = Color(0xFFCC0000);
-  static const Color darkRed = Color(0xFF660000);
-  static const Color stoneGray = Color(0xFF555555);
-  static const Color boneWhite = Color(0xFFDDCCBB);
-  static const Color fireOrange = Color(0xFFFF6600);
+  // --- Win91 / Frutiger Aero palette ---
+  static const Color bg = Color(0xFFECE9D8);
+  static const Color panel = Color(0xFFFFFFFF);
+  static const Color text = Color(0xFF222222);
+  static const Color muted = Color(0xFF808080);
+  static const Color border = Color(0xFFACA899);
+  static const Color link = Color(0xFF0066CC);
+  static const Color danger = Color(0xFFCC0000);
+  static const Color accentBg = Color(0xFFF0F0F0);
+  static const Color accentBlue = Color(0xFF316AC5);
+  static const Color accentPink = Color(0xFFD4A0C8);
+  static const Color accentYellow = Color(0xFFFFCC00);
+  static const Color accentCyan = Color(0xFF4AA8D8);
+  static const Color win98Gray = Color(0xFFD4D0C8);
+  static const Color win98Light = Color(0xFFFFFFFF);
+  static const Color win98Dark = Color(0xFF808080);
+  static const Color win98Darkest = Color(0xFF404040);
+  static const Color titleBar = Color(0xFF0054E3);
+  static const Color titleBarEnd = Color(0xFF2A8AD4);
 }
 
 abstract final class RetroSpacing {
@@ -39,55 +34,55 @@ ThemeData buildRetroMaterialTheme() {
     useMaterial3: true,
     scaffoldBackgroundColor: Colors.transparent,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: RetroTheme.bloodRed,
-      brightness: Brightness.dark,
+      seedColor: RetroTheme.accentBlue,
+      brightness: Brightness.light,
       surface: RetroTheme.panel,
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF0A0000),
-      foregroundColor: RetroTheme.bloodRed,
+      backgroundColor: RetroTheme.titleBar,
+      foregroundColor: Colors.white,
       elevation: 0,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: TextStyle(
-        color: RetroTheme.bloodRed,
-        fontSize: 18,
-        fontWeight: FontWeight.w900,
+        color: Colors.white,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
         fontFamily: 'monospace',
-        letterSpacing: 2.0,
+        letterSpacing: 0.5,
         shadows: [
           Shadow(
-              offset: Offset(2, 2), color: Color(0xFF000000), blurRadius: 0),
-          Shadow(
-              offset: Offset(0, 0), color: Color(0xFFFF0000), blurRadius: 8),
+              offset: Offset(1, 1), color: Color(0x66000000), blurRadius: 0),
         ],
       ),
     ),
     dividerTheme:
-        const DividerThemeData(color: RetroTheme.border, thickness: 2),
+        const DividerThemeData(color: RetroTheme.border, thickness: 1),
     snackBarTheme: const SnackBarThemeData(
-      backgroundColor: Color(0xFF1A0000),
+      backgroundColor: Color(0xFF316AC5),
       contentTextStyle: TextStyle(
-        color: RetroTheme.bloodRed,
+        color: Colors.white,
         fontFamily: 'monospace',
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
       ),
     ),
-    dialogTheme: const DialogThemeData(
+    dialogTheme: DialogThemeData(
       backgroundColor: RetroTheme.bg,
-      titleTextStyle: TextStyle(
-        color: RetroTheme.bloodRed,
-        fontWeight: FontWeight.w900,
+      titleTextStyle: const TextStyle(
+        color: RetroTheme.text,
+        fontWeight: FontWeight.w700,
         fontFamily: 'monospace',
-        fontSize: 18,
+        fontSize: 14,
       ),
-      contentTextStyle: TextStyle(
+      contentTextStyle: const TextStyle(
         color: RetroTheme.text,
         fontFamily: 'monospace',
+        fontSize: 13,
       ),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: RetroTheme.darkRed, width: 3),
-        borderRadius: BorderRadius.zero,
+        side: const BorderSide(color: RetroTheme.border, width: 1),
+        borderRadius: BorderRadius.circular(3),
       ),
     ),
   );
@@ -95,54 +90,56 @@ ThemeData buildRetroMaterialTheme() {
 
 PreferredSizeWidget retroAppBarBottomBorder() {
   return const PreferredSize(
-    preferredSize: Size.fromHeight(4),
-    child: _BloodDrip(height: 4),
+    preferredSize: Size.fromHeight(2),
+    child: _WinBorder(height: 2),
   );
 }
 
 AppBar retroAppBar(String title, {bool automaticallyImplyLeading = true}) {
   return AppBar(
-    backgroundColor: const Color(0xFF0A0000),
-    foregroundColor: RetroTheme.bloodRed,
     automaticallyImplyLeading: automaticallyImplyLeading,
-    title: Text(
-      '\u2620 $title \u2620',
-      style: const TextStyle(
-        fontWeight: FontWeight.w900,
-        fontFamily: 'monospace',
-        letterSpacing: 2.0,
-        color: RetroTheme.bloodRed,
-        shadows: [
-          Shadow(
-              offset: Offset(2, 2), color: Color(0xFF000000), blurRadius: 0),
-          Shadow(
-              offset: Offset(0, 0), color: Color(0xFFFF0000), blurRadius: 8),
-        ],
+    flexibleSpace: Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [RetroTheme.titleBar, RetroTheme.titleBarEnd],
+        ),
       ),
+    ),
+    title: Row(
+      children: [
+        const Icon(Icons.window, size: 16, color: Colors.white),
+        const SizedBox(width: 6),
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontFamily: 'monospace',
+            letterSpacing: 0.5,
+            fontSize: 14,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                  offset: Offset(1, 1),
+                  color: Color(0x66000000),
+                  blurRadius: 0),
+            ],
+          ),
+        ),
+      ],
     ),
     bottom: retroAppBarBottomBorder(),
   );
 }
 
-class _BloodDrip extends StatelessWidget {
-  const _BloodDrip({required this.height});
+class _WinBorder extends StatelessWidget {
+  const _WinBorder({required this.height});
   final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF330000),
-            Color(0xFFCC0000),
-            Color(0xFF660000),
-            Color(0xFFCC0000),
-            Color(0xFF330000),
-          ],
-        ),
-      ),
+      color: RetroTheme.border,
     );
   }
 }

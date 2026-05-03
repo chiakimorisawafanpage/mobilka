@@ -53,7 +53,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontFamily: 'monospace',
-                  color: RetroTheme.bloodRed,
+                  color: RetroTheme.muted,
                 ))),
       );
     }
@@ -73,7 +73,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.bloodRed,
+                    color: RetroTheme.accentBlue,
                   ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
@@ -82,7 +82,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.boneWhite,
+                    color: RetroTheme.accentBlue,
                   ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
@@ -144,9 +144,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(RetroSpacing.sm),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF000000),
+                        color: const Color(0xFFF5F5F0),
+                        borderRadius: BorderRadius.circular(2),
                         border:
-                            Border.all(color: RetroTheme.border, width: 2),
+                            Border.all(color: RetroTheme.border, width: 1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +157,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.boneWhite,
+                              color: RetroTheme.text,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
@@ -165,7 +166,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               fontFamily: 'monospace',
-                              color: RetroTheme.text,
+                              color: RetroTheme.muted,
                             ),
                           ),
                         ],

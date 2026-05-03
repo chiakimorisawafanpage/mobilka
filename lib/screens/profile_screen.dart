@@ -58,14 +58,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: 'MY DARK HOMEPAGE',
+            title: 'MY HOMEPAGE',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Welcome, wanderer, to your profile.\nFeel free to visit all my cave then\ntell me what you like and what not.',
+                  'Welcome to your profile page.\nFeel free to update your info.',
                   style: TextStyle(
-                    color: RetroTheme.text,
+                    color: RetroTheme.muted,
                     fontFamily: 'monospace',
                     height: 1.6,
                     fontStyle: FontStyle.italic,
