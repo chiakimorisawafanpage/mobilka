@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../db/auth_repo.dart';
 import '../theme.dart';
-import '../widgets/geocities_badges.dart';
-import '../widgets/rainbow_divider.dart';
 import 'auth_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -36,16 +34,6 @@ class ProfileScreen extends StatelessWidget {
                 ? _buildLoggedIn(context, auth)
                 : _buildGuest(context),
           ),
-          const SizedBox(height: RetroSpacing.md),
-          const RainbowDivider(height: 2),
-          const SizedBox(height: RetroSpacing.sm),
-          const Center(child: GeocitiesGuestbook()),
-          const SizedBox(height: RetroSpacing.sm),
-          const Center(child: GeocitiesHitCounter()),
-          const SizedBox(height: RetroSpacing.sm),
-          const Center(child: GeocitiesBestViewed()),
-          const SizedBox(height: RetroSpacing.sm),
-          const Center(child: GeocitiesWebring()),
           const SizedBox(height: RetroSpacing.lg),
         ],
       ),
