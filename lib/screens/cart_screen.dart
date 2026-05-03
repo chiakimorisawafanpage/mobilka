@@ -97,7 +97,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontFamily: 'monospace',
-                      color: RetroTheme.boneWhite,
+                      color: RetroTheme.accentBlue,
                       fontSize: 16,
                     ),
                   ),
@@ -129,11 +129,11 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
             Expanded(
               child: _lines.isEmpty
                   ? const Text(
-                      'EMPTY. Nothing but shadows here.',
+                      'Cart is empty.',
                       style: TextStyle(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'monospace',
-                        color: RetroTheme.text,
+                        color: RetroTheme.muted,
                       ),
                     )
                   : ListView.separated(
@@ -151,7 +151,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontFamily: 'monospace',
-                                  color: RetroTheme.boneWhite,
+                                  color: RetroTheme.text,
                                 ),
                               ),
                               const SizedBox(height: RetroSpacing.xs),
@@ -174,7 +174,7 @@ class _CartScreenState extends State<CartScreen> with RouteAware {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontFamily: 'monospace',
-                                  color: RetroTheme.boneWhite,
+                                  color: RetroTheme.accentBlue,
                                 ),
                               ),
                               const SizedBox(height: RetroSpacing.sm),

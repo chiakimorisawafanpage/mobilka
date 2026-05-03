@@ -9,49 +9,50 @@ class GeocitiesHitCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final count = (math.Random().nextInt(90000) + 10000).toString();
-
+    final count = (math.Random(42).nextInt(90000) + 10000).toString();
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
-        border: Border.all(color: RetroTheme.darkRed, width: 1),
+        color: RetroTheme.win98Gray,
+        borderRadius: BorderRadius.circular(2),
+        border: const Border(
+          top: BorderSide(color: RetroTheme.win98Dark, width: 1),
+          left: BorderSide(color: RetroTheme.win98Dark, width: 1),
+          right: BorderSide(color: RetroTheme.win98Light, width: 1),
+          bottom: BorderSide(color: RetroTheme.win98Light, width: 1),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            'SOULS CONSUMED: ',
+            'Visitors: ',
             style: TextStyle(
-              color: RetroTheme.silver,
+              color: RetroTheme.text,
               fontFamily: 'monospace',
               fontSize: 10,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          ...count.split('').map(
-                (d) => Container(
-                  width: 14,
-                  height: 18,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 1),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0A0000),
-                    border: Border.all(
-                        color: RetroTheme.darkRed.withValues(alpha: 0.5),
-                        width: 1),
-                  ),
-                  child: Text(
-                    d,
-                    style: const TextStyle(
-                      color: RetroTheme.bloodRed,
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w900,
-                    ),
+          ...count.characters.map((ch) => Container(
+                margin: const EdgeInsets.symmetric(horizontal: 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: RetroTheme.border, width: 1),
+                  borderRadius: BorderRadius.circular(1),
+                ),
+                child: Text(
+                  ch,
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontWeight: FontWeight.w900,
+                    fontSize: 11,
+                    color: RetroTheme.text,
                   ),
                 ),
-              ),
+              )),
         ],
       ),
     );
@@ -64,31 +65,28 @@ class GeocitiesUnderConstruction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0000),
-        border: Border.all(color: RetroTheme.bloodRed, width: 2),
+        color: const Color(0xFFFFF8E0),
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: RetroTheme.accentYellow, width: 1),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Icon(Icons.construction, size: 14, color: RetroTheme.accentYellow),
+          SizedBox(width: 6),
           Text(
-            '\u2620 ',
-            style: TextStyle(fontSize: 16, color: RetroTheme.bloodRed),
-          ),
-          Text(
-            'ENTER AT YOUR OWN RISK',
+            'Under Construction',
             style: TextStyle(
+              fontWeight: FontWeight.w700,
               fontFamily: 'monospace',
-              fontWeight: FontWeight.w900,
-              fontSize: 11,
-              color: RetroTheme.bloodRed,
+              color: Color(0xFF886600),
+              fontSize: 10,
             ),
           ),
-          Text(
-            ' \u2620',
-            style: TextStyle(fontSize: 16, color: RetroTheme.bloodRed),
-          ),
+          SizedBox(width: 6),
+          Icon(Icons.construction, size: 14, color: RetroTheme.accentYellow),
         ],
       ),
     );
@@ -101,20 +99,18 @@ class GeocitiesBestViewed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
-        border: Border.all(
-            color: RetroTheme.border.withValues(alpha: 0.5), width: 1),
+        color: RetroTheme.win98Gray,
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: RetroTheme.border, width: 1),
       ),
       child: const Text(
-        'Best viewed in the dark\nat 800x600 resolution',
-        textAlign: TextAlign.center,
+        'Best viewed at 800x600 resolution',
         style: TextStyle(
           fontFamily: 'monospace',
           fontSize: 9,
-          color: RetroTheme.silver,
-          height: 1.4,
+          color: RetroTheme.muted,
         ),
       ),
     );
@@ -127,20 +123,29 @@ class GeocitiesGuestbook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0000),
-        border: Border.all(color: RetroTheme.darkRed, width: 2),
+        color: RetroTheme.panel,
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: RetroTheme.accentBlue, width: 1),
       ),
-      child: const Text(
-        '\u270F Sign the Book of Shadows \u270F',
-        style: TextStyle(
-          fontFamily: 'monospace',
-          fontWeight: FontWeight.w700,
-          fontSize: 11,
-          color: RetroTheme.bloodRed,
-          decoration: TextDecoration.underline,
-        ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.edit_note, size: 14, color: RetroTheme.accentBlue),
+          SizedBox(width: 6),
+          Text(
+            'Sign my Guestbook',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: 'monospace',
+              color: RetroTheme.accentBlue,
+              fontSize: 10,
+              decoration: TextDecoration.underline,
+              decorationColor: RetroTheme.accentBlue,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -152,39 +157,42 @@ class GeocitiesWebring extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
-        border: Border.all(color: RetroTheme.darkRed, width: 1),
+        color: RetroTheme.win98Gray,
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: RetroTheme.border, width: 1),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '<< prev',
+            '[\u25C0 prev]',
             style: TextStyle(
               fontFamily: 'monospace',
-              fontSize: 10,
-              color: RetroTheme.bloodRed,
-              decoration: TextDecoration.underline,
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              color: RetroTheme.link,
             ),
           ),
+          SizedBox(width: 6),
           Text(
-            ' | DARK WEBRING | ',
+            'Energy Webring',
             style: TextStyle(
               fontFamily: 'monospace',
               fontSize: 10,
-              fontWeight: FontWeight.w900,
-              color: RetroTheme.silver,
+              fontWeight: FontWeight.w700,
+              color: RetroTheme.text,
             ),
           ),
+          SizedBox(width: 6),
           Text(
-            'next >>',
+            '[next \u25B6]',
             style: TextStyle(
               fontFamily: 'monospace',
-              fontSize: 10,
-              color: RetroTheme.bloodRed,
-              decoration: TextDecoration.underline,
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              color: RetroTheme.link,
             ),
           ),
         ],

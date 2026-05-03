@@ -12,27 +12,23 @@ class RetroPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: RetroTheme.panel.withValues(alpha: 0.9),
+        color: RetroTheme.panel,
+        borderRadius: BorderRadius.circular(3),
         border: const Border(
-          top: BorderSide(color: RetroTheme.stoneGray, width: 2),
-          left: BorderSide(color: RetroTheme.stoneGray, width: 2),
-          right: BorderSide(color: Color(0xFF1A1A1A), width: 2),
-          bottom: BorderSide(color: Color(0xFF1A1A1A), width: 2),
+          top: BorderSide(color: RetroTheme.win98Light, width: 1),
+          left: BorderSide(color: RetroTheme.win98Light, width: 1),
+          right: BorderSide(color: RetroTheme.win98Dark, width: 1),
+          bottom: BorderSide(color: RetroTheme.win98Dark, width: 1),
         ),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x33CC0000),
-            offset: Offset(0, 0),
-            blurRadius: 6,
-            spreadRadius: 1,
-          ),
-          BoxShadow(
-            color: Color(0xFF000000),
-            offset: Offset(3, 3),
-            blurRadius: 6,
+            color: Color(0x18000000),
+            offset: Offset(1, 2),
+            blurRadius: 4,
           ),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,47 +36,27 @@ class RetroPanel extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(
-                  horizontal: RetroSpacing.sm, vertical: RetroSpacing.xs),
+                  horizontal: RetroSpacing.sm, vertical: 5),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF1A0000),
-                    Color(0xFF330000),
-                    Color(0xFF1A0000),
-                  ],
-                ),
-                border: Border(
-                  bottom:
-                      BorderSide(color: RetroTheme.darkRed, width: 1),
+                  colors: [RetroTheme.titleBar, RetroTheme.titleBarEnd],
                 ),
               ),
-              child: Row(
-                children: [
-                  const Text('\u2620 ',
-                      style: TextStyle(
-                          fontSize: 12, color: RetroTheme.bloodRed)),
-                  Expanded(
-                    child: Text(
-                      title!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'monospace',
-                        letterSpacing: 1.2,
-                        color: RetroTheme.bloodRed,
-                        fontSize: 12,
-                        shadows: [
-                          Shadow(
-                              offset: Offset(0, 0),
-                              color: Color(0xFFFF0000),
-                              blurRadius: 4),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Text(' \u2620',
-                      style: TextStyle(
-                          fontSize: 12, color: RetroTheme.bloodRed)),
-                ],
+              child: Text(
+                title!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'monospace',
+                  letterSpacing: 0.3,
+                  color: Colors.white,
+                  fontSize: 12,
+                  shadows: [
+                    Shadow(
+                        offset: Offset(1, 1),
+                        color: Color(0x44000000),
+                        blurRadius: 0),
+                  ],
+                ),
               ),
             ),
           Padding(

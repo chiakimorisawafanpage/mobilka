@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
-import 'retro_button.dart';
 
 class RetroSelectOption<T> {
   const RetroSelectOption({required this.value, required this.label});
@@ -14,8 +13,8 @@ class RetroSelect<T> extends StatelessWidget {
   const RetroSelect({
     super.key,
     required this.label,
-    required this.value,
     required this.options,
+    required this.value,
     required this.onChanged,
   });
 
@@ -24,14 +23,13 @@ class RetroSelect<T> extends StatelessWidget {
   final List<RetroSelectOption<T>> options;
   final ValueChanged<T> onChanged;
 
-  String _labelFor(T v) {
-    return options
-        .firstWhere((o) => o.value == v, orElse: () => options.first)
-        .label;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final current = options.firstWhere(
+      (o) => o.value == value,
+      orElse: () => options.first,
+    );
+
     return Padding(
       padding: const EdgeInsets.only(bottom: RetroSpacing.md),
       child: Column(
@@ -40,111 +38,80 @@ class RetroSelect<T> extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               fontFamily: 'monospace',
-              color: RetroTheme.bloodRed,
+              color: RetroTheme.text,
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: RetroSpacing.xs),
-          InkWell(
+          const SizedBox(height: 4),
+          GestureDetector(
             onTap: () async {
-              await showDialog<void>(
+              final picked = await showDialog<T>(
                 context: context,
-                barrierDismissible: true,
                 builder: (ctx) {
-                  return AlertDialog(
-                    backgroundColor: RetroTheme.bg,
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: RetroTheme.darkRed, width: 3),
-                      borderRadius: BorderRadius.zero,
-                    ),
+                  return SimpleDialog(
                     title: const Text(
-                      '\u2620 SELECT \u2620',
+                      'SELECT',
                       style: TextStyle(
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                         fontFamily: 'monospace',
-                        color: RetroTheme.bloodRed,
+                        color: RetroTheme.text,
+                        fontSize: 14,
                       ),
                     ),
-                    content: SizedBox(
-                      width: double.maxFinite,
-                      child: ListView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          for (final o in options)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: RetroSpacing.sm),
-                              child: Material(
-                                color: const Color(0xFF000000),
-                                child: InkWell(
-                                  onTap: () {
-                                    onChanged(o.value);
-                                    Navigator.of(ctx).pop();
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(
-                                        RetroSpacing.sm),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: RetroTheme.border,
-                                          width: 2),
-                                    ),
-                                    child: Text(
-                                      '> ${o.label}',
-                                      style: const TextStyle(
-                                        color: RetroTheme.bloodRed,
-                                        fontWeight: FontWeight.w800,
-                                        fontFamily: 'monospace',
-                                        decoration:
-                                            TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      RetroButton(
-                          title: '[X] CLOSE',
-                          onPressed: () => Navigator.of(ctx).pop()),
-                    ],
+                    children: options.map((o) {
+                      final selected = o.value == value;
+                      return SimpleDialogOption(
+                        onPressed: () => Navigator.pop(ctx, o.value),
+                        child: Text(
+                          selected ? '> ${o.label}' : '  ${o.label}',
+                          style: TextStyle(
+                            fontWeight: selected
+                                ? FontWeight.w800
+                                : FontWeight.w500,
+                            fontFamily: 'monospace',
+                            color: selected
+                                ? RetroTheme.accentBlue
+                                : RetroTheme.text,
+                            fontSize: 13,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   );
                 },
               );
+              if (picked != null) onChanged(picked);
             },
             child: Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(
-                  horizontal: RetroSpacing.sm, vertical: RetroSpacing.sm),
+                  horizontal: RetroSpacing.sm, vertical: 8),
               decoration: BoxDecoration(
-                color: const Color(0xFF000000),
-                border: Border.all(color: RetroTheme.border, width: 2),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(2),
+                border: const Border(
+                  top: BorderSide(color: RetroTheme.win98Dark, width: 1),
+                  left: BorderSide(color: RetroTheme.win98Dark, width: 1),
+                  right: BorderSide(color: RetroTheme.win98Light, width: 1),
+                  bottom: BorderSide(color: RetroTheme.win98Light, width: 1),
+                ),
               ),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      _labelFor(value),
+                      current.label,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w700,
                         fontFamily: 'monospace',
                         color: RetroTheme.text,
+                        fontSize: 13,
                       ),
                     ),
                   ),
-                  const Text('[v]',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'monospace',
-                        color: RetroTheme.bloodRed,
-                      )),
+                  const Icon(Icons.arrow_drop_down,
+                      size: 18, color: RetroTheme.muted),
                 ],
               ),
             ),

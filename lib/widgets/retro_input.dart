@@ -59,13 +59,13 @@ class _RetroInputState extends State<RetroInput> {
           Text(
             widget.label,
             style: const TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               fontFamily: 'monospace',
-              color: RetroTheme.bloodRed,
+              color: RetroTheme.text,
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: RetroSpacing.xs),
+          const SizedBox(height: 4),
           TextField(
             controller: _ctrl,
             onChanged: widget.onChanged,
@@ -74,36 +74,36 @@ class _RetroInputState extends State<RetroInput> {
                 : widget.keyboardType,
             maxLines: widget.multiline ? 4 : 1,
             obscureText: widget.obscureText,
-            cursorColor: RetroTheme.bloodRed,
+            cursorColor: RetroTheme.accentBlue,
             style: const TextStyle(
               color: RetroTheme.text,
               fontFamily: 'monospace',
-              fontSize: 14,
+              fontSize: 13,
             ),
             decoration: InputDecoration(
               isDense: true,
               hintText: widget.placeholder,
               hintStyle: TextStyle(
-                color: RetroTheme.text.withValues(alpha: 0.3),
+                color: RetroTheme.text.withValues(alpha: 0.35),
                 fontFamily: 'monospace',
-                fontSize: 14,
+                fontSize: 13,
               ),
               filled: true,
-              fillColor: const Color(0xFF000000),
+              fillColor: Colors.white,
               contentPadding: const EdgeInsets.symmetric(
-                  horizontal: RetroSpacing.sm, vertical: RetroSpacing.sm),
+                  horizontal: RetroSpacing.sm, vertical: 8),
               border: const OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                   borderSide:
-                      BorderSide(color: RetroTheme.border, width: 2)),
-              enabledBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide:
-                      BorderSide(color: RetroTheme.border, width: 2)),
-              focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide:
-                      BorderSide(color: RetroTheme.bloodRed, width: 2)),
+                      BorderSide(color: RetroTheme.win98Dark, width: 1)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(2),
+                  borderSide: const BorderSide(
+                      color: RetroTheme.win98Dark, width: 1)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(2),
+                  borderSide: const BorderSide(
+                      color: RetroTheme.accentBlue, width: 2)),
             ),
           ),
         ],

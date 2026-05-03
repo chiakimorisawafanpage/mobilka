@@ -59,11 +59,11 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: _orders.isEmpty
             ? const Text(
-                'NO ORDERS YET.',
+                'No orders yet.',
                 style: TextStyle(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'monospace',
-                  color: RetroTheme.text,
+                  color: RetroTheme.muted,
                 ),
               )
             : ListView.separated(
@@ -86,8 +86,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.bloodRed,
+                              color: RetroTheme.link,
                               decoration: TextDecoration.underline,
+                              decorationColor: RetroTheme.link,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
@@ -105,7 +106,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.boneWhite,
+                              color: RetroTheme.accentBlue,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),

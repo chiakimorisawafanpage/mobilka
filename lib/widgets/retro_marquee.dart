@@ -32,8 +32,7 @@ class _RetroMarqueeState extends State<RetroMarquee>
       }
       await _sc.animateTo(
         max,
-        duration: Duration(
-            milliseconds: (max * 35).floor()),
+        duration: Duration(milliseconds: (max * 40).floor()),
         curve: Curves.linear,
       );
       if (_disposed || !_sc.hasClients) break;
@@ -51,38 +50,21 @@ class _RetroMarqueeState extends State<RetroMarquee>
   @override
   Widget build(BuildContext context) {
     const style = TextStyle(
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w700,
       fontFamily: 'monospace',
-      fontSize: 13,
-      letterSpacing: 1.1,
-      color: RetroTheme.bloodRed,
-      shadows: [
-        Shadow(
-            offset: Offset(1, 1), color: Color(0xFF000000), blurRadius: 0),
-        Shadow(
-            offset: Offset(0, 0), color: Color(0xFFFF0000), blurRadius: 6),
-      ],
+      fontSize: 12,
+      letterSpacing: 0.5,
+      color: RetroTheme.accentBlue,
     );
 
-    final sep = ' \u2620 ';
-    final full = List.filled(4, widget.text).join(sep);
+    final full = List.filled(4, widget.text).join('  \u2022  ');
 
     return Container(
-      height: 28,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF0A0000), Color(0xFF1A0000), Color(0xFF0A0000)],
-        ),
-        border: Border.symmetric(
-          horizontal: BorderSide(color: RetroTheme.darkRed, width: 1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x44FF0000),
-            offset: Offset(0, 0),
-            blurRadius: 4,
-          ),
-        ],
+      height: 26,
+      decoration: BoxDecoration(
+        color: RetroTheme.panel,
+        border: Border.all(color: RetroTheme.border, width: 1),
+        borderRadius: BorderRadius.circular(2),
       ),
       alignment: Alignment.centerLeft,
       child: SingleChildScrollView(

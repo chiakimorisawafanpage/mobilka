@@ -59,7 +59,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontFamily: 'monospace',
-                  color: RetroTheme.bloodRed,
+                  color: RetroTheme.muted,
                 ))),
       );
     }
@@ -80,13 +80,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.boneWhite,
-                    shadows: [
-                      Shadow(
-                          offset: Offset(2, 2),
-                          color: Color(0xFFCC0000),
-                          blurRadius: 0),
-                    ],
+                    color: RetroTheme.text,
                   ),
                 ),
                 const SizedBox(height: RetroSpacing.sm),
@@ -110,13 +104,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.boneWhite,
-                    shadows: [
-                      Shadow(
-                          offset: Offset(1, 1),
-                          color: Color(0xFFCC0000),
-                          blurRadius: 0),
-                    ],
+                    color: RetroTheme.accentBlue,
                   ),
                 ),
                 const SizedBox(height: RetroSpacing.sm),
@@ -124,15 +112,16 @@ class _ProductScreenState extends State<ProductScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(RetroSpacing.sm),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF000000),
+                    color: const Color(0xFFF5F5F0),
+                    borderRadius: BorderRadius.circular(2),
                     border:
-                        Border.all(color: RetroTheme.darkRed, width: 1),
+                        Border.all(color: RetroTheme.border, width: 1),
                   ),
                   child: Text(product.eraNote,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'monospace',
-                        color: RetroTheme.silver,
+                        color: RetroTheme.muted,
                         fontStyle: FontStyle.italic,
                       )),
                 ),
@@ -142,8 +131,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.bloodRed,
-                    decoration: TextDecoration.underline,
+                    color: RetroTheme.accentBlue,
                   ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
@@ -158,8 +146,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.bloodRed,
-                    decoration: TextDecoration.underline,
+                    color: RetroTheme.accentBlue,
                   ),
                 ),
                 const SizedBox(height: RetroSpacing.xs),
@@ -240,9 +227,9 @@ class _ProductScreenState extends State<ProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_reviews.isEmpty)
-                  const Text('No reviews yet... the silence is deafening.',
+                  const Text('No reviews yet.',
                       style: TextStyle(
-                        color: RetroTheme.text,
+                        color: RetroTheme.muted,
                         fontFamily: 'monospace',
                       )),
                 ..._reviews.map(
@@ -252,9 +239,10 @@ class _ProductScreenState extends State<ProductScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(RetroSpacing.sm),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF000000),
+                        color: const Color(0xFFF5F5F0),
+                        borderRadius: BorderRadius.circular(2),
                         border: Border.all(
-                            color: RetroTheme.border, width: 2),
+                            color: RetroTheme.border, width: 1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +252,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.bloodRed,
+                              color: RetroTheme.accentBlue,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
