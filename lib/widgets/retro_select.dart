@@ -88,10 +88,9 @@ class RetroSelect<T> extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(
                   horizontal: RetroSpacing.sm, vertical: 8),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(2),
-                border: const Border(
+                border: Border(
                   top: BorderSide(color: RetroTheme.win98Dark, width: 1),
                   left: BorderSide(color: RetroTheme.win98Dark, width: 1),
                   right: BorderSide(color: RetroTheme.win98Light, width: 1),

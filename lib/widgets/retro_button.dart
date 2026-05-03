@@ -62,7 +62,6 @@ class RetroButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(2),
             border: Border(
               top: BorderSide(color: lightBorder, width: 1),
               left: BorderSide(color: lightBorder, width: 1),

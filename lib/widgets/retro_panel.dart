@@ -11,16 +11,15 @@ class RetroPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: RetroTheme.panel,
-        borderRadius: BorderRadius.circular(3),
-        border: const Border(
+        border: Border(
           top: BorderSide(color: RetroTheme.win98Light, width: 1),
           left: BorderSide(color: RetroTheme.win98Light, width: 1),
           right: BorderSide(color: RetroTheme.win98Dark, width: 1),
           bottom: BorderSide(color: RetroTheme.win98Dark, width: 1),
         ),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             color: Color(0x18000000),
             offset: Offset(1, 2),

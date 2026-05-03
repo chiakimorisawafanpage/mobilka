@@ -18,10 +18,9 @@ class ProductThumb extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F0),
-        borderRadius: BorderRadius.circular(3),
-        border: const Border(
+      decoration: const BoxDecoration(
+        color: Color(0xFFF5F5F0),
+        border: Border(
           top: BorderSide(color: RetroTheme.win98Dark, width: 1),
           left: BorderSide(color: RetroTheme.win98Dark, width: 1),
           right: BorderSide(color: RetroTheme.win98Light, width: 1),
