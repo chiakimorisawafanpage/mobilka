@@ -91,7 +91,7 @@ class AppShell extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: _GeocitiesNavBar(
+      bottomNavigationBar: _GothicNavBar(
         currentIndex: ctrl.tab,
         onTap: context.read<AppShellController>().setTab,
       ),
@@ -99,8 +99,8 @@ class AppShell extends StatelessWidget {
   }
 }
 
-class _GeocitiesNavBar extends StatelessWidget {
-  const _GeocitiesNavBar({
+class _GothicNavBar extends StatelessWidget {
+  const _GothicNavBar({
     required this.currentIndex,
     required this.onTap,
   });
@@ -119,9 +119,9 @@ class _GeocitiesNavBar extends StatelessWidget {
 
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF000011),
+        color: Color(0xFF050505),
         border: Border(
-          top: BorderSide(color: RetroTheme.accentCyan, width: 2),
+          top: BorderSide(color: RetroTheme.darkRed, width: 2),
         ),
       ),
       child: SafeArea(
@@ -141,8 +141,8 @@ class _GeocitiesNavBar extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Color(0xFF330066),
-                              Color(0xFF000033),
+                              Color(0xFF1A0000),
+                              Color(0xFF000000),
                             ],
                           )
                         : null,
@@ -150,7 +150,7 @@ class _GeocitiesNavBar extends StatelessWidget {
                       left: i > 0
                           ? BorderSide(
                               color:
-                                  RetroTheme.border.withValues(alpha: 0.5),
+                                  RetroTheme.border.withValues(alpha: 0.3),
                               width: 1)
                           : BorderSide.none,
                     ),
@@ -162,12 +162,12 @@ class _GeocitiesNavBar extends StatelessWidget {
                         item.icon,
                         size: 22,
                         color: selected
-                            ? RetroTheme.accentYellow
+                            ? RetroTheme.bloodRed
                             : RetroTheme.silver,
                         shadows: selected
                             ? const [
                                 Shadow(
-                                    color: Color(0xFFFFFF00),
+                                    color: Color(0xFFFF0000),
                                     blurRadius: 8),
                               ]
                             : null,
@@ -181,12 +181,12 @@ class _GeocitiesNavBar extends StatelessWidget {
                           fontSize: 9,
                           letterSpacing: 1.0,
                           color: selected
-                              ? RetroTheme.accentCyan
+                              ? RetroTheme.bloodRed
                               : RetroTheme.silver,
                           shadows: selected
                               ? const [
                                   Shadow(
-                                      color: Color(0xFF00FFFF),
+                                      color: Color(0xFFFF0000),
                                       blurRadius: 6),
                                 ]
                               : null,

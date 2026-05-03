@@ -59,7 +59,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontFamily: 'monospace',
-                  color: RetroTheme.text,
+                  color: RetroTheme.bloodRed,
                 ))),
       );
     }
@@ -70,7 +70,7 @@ class _ProductScreenState extends State<ProductScreen> {
         padding: const EdgeInsets.all(RetroSpacing.md),
         children: [
           RetroPanel(
-            title: '\u2605 PRODUCT INFO \u2605',
+            title: 'PRODUCT INFO',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -80,11 +80,11 @@ class _ProductScreenState extends State<ProductScreen> {
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.accentYellow,
+                    color: RetroTheme.boneWhite,
                     shadows: [
                       Shadow(
                           offset: Offset(2, 2),
-                          color: Color(0xFF000000),
+                          color: Color(0xFFCC0000),
                           blurRadius: 0),
                     ],
                   ),
@@ -110,11 +110,11 @@ class _ProductScreenState extends State<ProductScreen> {
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.accentYellow,
+                    color: RetroTheme.boneWhite,
                     shadows: [
                       Shadow(
                           offset: Offset(1, 1),
-                          color: Color(0xFFFF0000),
+                          color: Color(0xFFCC0000),
                           blurRadius: 0),
                     ],
                   ),
@@ -126,23 +126,23 @@ class _ProductScreenState extends State<ProductScreen> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF000000),
                     border:
-                        Border.all(color: RetroTheme.accentCyan, width: 1),
+                        Border.all(color: RetroTheme.darkRed, width: 1),
                   ),
                   child: Text(product.eraNote,
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontFamily: 'monospace',
-                        color: RetroTheme.accentPink,
+                        color: RetroTheme.silver,
                         fontStyle: FontStyle.italic,
                       )),
                 ),
                 const RainbowDivider(height: 2),
                 const Text(
-                  '>> DESCRIPTION <<',
+                  '\u00BB DESCRIPTION',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.accentCyan,
+                    color: RetroTheme.bloodRed,
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -154,11 +154,11 @@ class _ProductScreenState extends State<ProductScreen> {
                     )),
                 const SizedBox(height: RetroSpacing.md),
                 const Text(
-                  '>> INGREDIENTS <<',
+                  '\u00BB INGREDIENTS',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
-                    color: RetroTheme.accentCyan,
+                    color: RetroTheme.bloodRed,
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -173,7 +173,7 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
           const SizedBox(height: RetroSpacing.md),
           RetroPanel(
-            title: '\u2605 ADD TO CART \u2605',
+            title: 'ADD TO CART',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -235,13 +235,12 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
           const SizedBox(height: RetroSpacing.md),
           RetroPanel(
-            title: '\u2605 REVIEWS (${_reviews.length}) \u2605',
+            title: 'REVIEWS (${_reviews.length})',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_reviews.isEmpty)
-                  const Text(
-                      'No reviews yet (but that\'s not a bug, it\'s an era).',
+                  const Text('No reviews yet... the silence is deafening.',
                       style: TextStyle(
                         color: RetroTheme.text,
                         fontFamily: 'monospace',
@@ -265,7 +264,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.accentYellow,
+                              color: RetroTheme.bloodRed,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),

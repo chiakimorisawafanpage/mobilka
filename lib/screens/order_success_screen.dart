@@ -43,26 +43,30 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
     final order = _order;
 
     return Scaffold(
-      appBar: retroAppBar('\u2605 SUCCESS \u2605'),
+      appBar: retroAppBar('SUCCESS'),
       body: Padding(
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: RetroPanel(
-          title: '\u2605 ORDER SUBMITTED \u2605',
+          title: 'ORDER SUBMITTED',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const BlinkText(
-                text: '\u2605\u2605\u2605 THANK YOU! \u2605\u2605\u2605',
+                text: '\u2620\u2620\u2620 IT IS DONE \u2620\u2620\u2620',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
                   fontFamily: 'monospace',
-                  color: RetroTheme.accentYellow,
+                  color: RetroTheme.bloodRed,
                   shadows: [
                     Shadow(
                         offset: Offset(2, 2),
-                        color: Color(0xFFFF0000),
+                        color: Color(0xFF000000),
                         blurRadius: 0),
+                    Shadow(
+                        offset: Offset(0, 0),
+                        color: Color(0xFFFF0000),
+                        blurRadius: 8),
                   ],
                 ),
               ),
@@ -86,14 +90,14 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                           text: order.status.dbValue,
                           style: const TextStyle(
                             fontWeight: FontWeight.w900,
-                            color: RetroTheme.accentCyan,
+                            color: RetroTheme.bloodRed,
                           )),
                       const TextSpan(text: ' \u00B7 Total: '),
                       TextSpan(
                         text: order.total.toStringAsFixed(0),
                         style: const TextStyle(
                           fontWeight: FontWeight.w900,
-                          color: RetroTheme.accentYellow,
+                          color: RetroTheme.boneWhite,
                         ),
                       ),
                       const TextSpan(text: ' \u20BD'),

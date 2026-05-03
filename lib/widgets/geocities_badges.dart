@@ -15,13 +15,13 @@ class GeocitiesHitCounter extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: const Color(0xFF000000),
-        border: Border.all(color: RetroTheme.accentCyan, width: 1),
+        border: Border.all(color: RetroTheme.darkRed, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            'VISITORS: ',
+            'SOULS CONSUMED: ',
             style: TextStyle(
               color: RetroTheme.silver,
               fontFamily: 'monospace',
@@ -36,15 +36,15 @@ class GeocitiesHitCounter extends StatelessWidget {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.symmetric(horizontal: 1),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF001100),
+                    color: const Color(0xFF0A0000),
                     border: Border.all(
-                        color: RetroTheme.text.withValues(alpha: 0.5),
+                        color: RetroTheme.darkRed.withValues(alpha: 0.5),
                         width: 1),
                   ),
                   child: Text(
                     d,
                     style: const TextStyle(
-                      color: RetroTheme.text,
+                      color: RetroTheme.bloodRed,
                       fontFamily: 'monospace',
                       fontSize: 12,
                       fontWeight: FontWeight.w900,
@@ -66,44 +66,28 @@ class GeocitiesUnderConstruction extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFFFF00), Color(0xFF000000)],
-          stops: [0.0, 1.0],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          tileMode: TileMode.repeated,
-        ),
-        border: Border.all(color: RetroTheme.accentYellow, width: 2),
+        color: const Color(0xFF0A0000),
+        border: Border.all(color: RetroTheme.bloodRed, width: 2),
       ),
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            '\u26A0 ',
-            style: TextStyle(fontSize: 16, color: RetroTheme.accentYellow),
+          Text(
+            '\u2620 ',
+            style: TextStyle(fontSize: 16, color: RetroTheme.bloodRed),
           ),
-          RichText(
-            text: const TextSpan(
-              style: TextStyle(
-                fontFamily: 'monospace',
-                fontWeight: FontWeight.w900,
-                fontSize: 11,
-              ),
-              children: [
-                TextSpan(
-                  text: 'UNDER ',
-                  style: TextStyle(color: Color(0xFF000000)),
-                ),
-                TextSpan(
-                  text: 'CONSTRUCTION',
-                  style: TextStyle(color: Color(0xFFFF0000)),
-                ),
-              ],
+          Text(
+            'ENTER AT YOUR OWN RISK',
+            style: TextStyle(
+              fontFamily: 'monospace',
+              fontWeight: FontWeight.w900,
+              fontSize: 11,
+              color: RetroTheme.bloodRed,
             ),
           ),
-          const Text(
-            ' \u26A0',
-            style: TextStyle(fontSize: 16, color: RetroTheme.accentYellow),
+          Text(
+            ' \u2620',
+            style: TextStyle(fontSize: 16, color: RetroTheme.bloodRed),
           ),
         ],
       ),
@@ -124,7 +108,7 @@ class GeocitiesBestViewed extends StatelessWidget {
             color: RetroTheme.border.withValues(alpha: 0.5), width: 1),
       ),
       child: const Text(
-        'Best viewed in Netscape Navigator 4.0\nat 800x600 resolution',
+        'Best viewed in the dark\nat 800x600 resolution',
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: 'monospace',
@@ -145,16 +129,16 @@ class GeocitiesGuestbook extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF000033),
-        border: Border.all(color: RetroTheme.link, width: 2),
+        color: const Color(0xFF0A0000),
+        border: Border.all(color: RetroTheme.darkRed, width: 2),
       ),
       child: const Text(
-        '\u270F Sign my Guestbook! \u270F',
+        '\u270F Sign the Book of Shadows \u270F',
         style: TextStyle(
           fontFamily: 'monospace',
           fontWeight: FontWeight.w700,
           fontSize: 11,
-          color: RetroTheme.link,
+          color: RetroTheme.bloodRed,
           decoration: TextDecoration.underline,
         ),
       ),
@@ -171,7 +155,7 @@ class GeocitiesWebring extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: const Color(0xFF000000),
-        border: Border.all(color: RetroTheme.accentBlue, width: 1),
+        border: Border.all(color: RetroTheme.darkRed, width: 1),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
@@ -181,17 +165,17 @@ class GeocitiesWebring extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'monospace',
               fontSize: 10,
-              color: RetroTheme.accentCyan,
+              color: RetroTheme.bloodRed,
               decoration: TextDecoration.underline,
             ),
           ),
           Text(
-            ' | ENERGY WEBRING | ',
+            ' | DARK WEBRING | ',
             style: TextStyle(
               fontFamily: 'monospace',
               fontSize: 10,
               fontWeight: FontWeight.w900,
-              color: RetroTheme.accentYellow,
+              color: RetroTheme.silver,
             ),
           ),
           Text(
@@ -199,7 +183,7 @@ class GeocitiesWebring extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'monospace',
               fontSize: 10,
-              color: RetroTheme.accentCyan,
+              color: RetroTheme.bloodRed,
               decoration: TextDecoration.underline,
             ),
           ),

@@ -54,8 +54,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: retroAppBar('\u2605 ORDERS \u2605',
-          automaticallyImplyLeading: false),
+      appBar: retroAppBar('ORDERS', automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.all(RetroSpacing.md),
         child: _orders.isEmpty
@@ -87,7 +86,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.link,
+                              color: RetroTheme.bloodRed,
                               decoration: TextDecoration.underline,
                             ),
                           ),
@@ -106,7 +105,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
                             style: const TextStyle(
                               fontWeight: FontWeight.w900,
                               fontFamily: 'monospace',
-                              color: RetroTheme.accentYellow,
+                              color: RetroTheme.boneWhite,
                             ),
                           ),
                           const SizedBox(height: RetroSpacing.xs),
