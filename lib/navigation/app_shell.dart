@@ -1,61 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/cart_screen.dart';
 import '../screens/catalog_screen.dart';
+import '../screens/order_detail_screen.dart';
 import '../screens/orders_list_screen.dart';
+import '../screens/product_screen.dart';
 import '../screens/profile_screen.dart';
 import '../theme.dart';
 import '../widgets/retro_y2k_background.dart';
+import 'app_shell_controller.dart';
+import 'route_observer.dart';
 
-class AppShell extends StatefulWidget {
+class AppShell extends StatelessWidget {
   const AppShell({super.key});
 
   @override
-  State<AppShell> createState() => _AppShellState();
-}
-
-class _AppShellState extends State<AppShell> {
-  int _tab = 0;
-
-  final _navKeys = List.generate(4, (_) => GlobalKey<NavigatorState>());
-
-  @override
   Widget build(BuildContext context) {
+    final ctrl = context.watch<AppShellController>();
+
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
-          const Positioned.fill(child: RetroY2KBackground()),
-          Positioned.fill(
-            child: IndexedStack(
-              index: _tab,
-              children: [
-                _buildNav(0, const CatalogScreen()),
-                _buildNav(1, const CartScreen()),
-                _buildNav(2, const OrdersListScreen()),
-                _buildNav(3, const ProfileScreen()),
-              ],
-            ),
+          const RetroY2KBackground(),
+          IndexedStack(
+            index: ctrl.tab,
+            children: [
+              Navigator(
+                key: ctrl.shopNavKey,
+                observers: [appRouteObserver],
+                onGenerateRoute: (settings) {
+                  switch (settings.name) {
+                    case '/product':
+                      final id = settings.arguments! as int;
+                      return MaterialPageRoute<void>(
+                        settings: settings,
+                        builder: (_) => ProductScreen(productId: id),
+                      );
+                    case '/catalog':
+                    default:
+                      return MaterialPageRoute<void>(
+                        settings: settings,
+                        builder: (_) => const CatalogScreen(),
+                      );
+                  }
+                },
+              ),
+              Navigator(
+                key: ctrl.cartNavKey,
+                observers: [appRouteObserver],
+                onGenerateRoute: (settings) {
+                  return MaterialPageRoute<void>(
+                    settings: settings,
+                    builder: (_) => const CartScreen(),
+                  );
+                },
+              ),
+              Navigator(
+                key: ctrl.ordersNavKey,
+                observers: [appRouteObserver],
+                onGenerateRoute: (settings) {
+                  switch (settings.name) {
+                    case '/order':
+                      final id = settings.arguments! as int;
+                      return MaterialPageRoute<void>(
+                        settings: settings,
+                        builder: (_) => OrderDetailScreen(orderId: id),
+                      );
+                    case '/orders':
+                    default:
+                      return MaterialPageRoute<void>(
+                        settings: settings,
+                        builder: (_) => const OrdersListScreen(),
+                      );
+                  }
+                },
+              ),
+              Navigator(
+                key: ctrl.profileNavKey,
+                observers: [appRouteObserver],
+                onGenerateRoute: (settings) {
+                  return MaterialPageRoute<void>(
+                    settings: settings,
+                    builder: (_) => const ProfileScreen(),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),
       bottomNavigationBar: _WinTaskbar(
-        currentIndex: _tab,
-        onTap: (i) {
-          if (i == _tab) {
-            _navKeys[i].currentState?.popUntil((r) => r.isFirst);
-          } else {
-            setState(() => _tab = i);
-          }
-        },
+        currentIndex: ctrl.tab,
+        onTap: context.read<AppShellController>().setTab,
       ),
-    );
-  }
-
-  Widget _buildNav(int idx, Widget root) {
-    return Navigator(
-      key: _navKeys[idx],
-      onGenerateRoute: (_) =>
-          MaterialPageRoute(builder: (_) => root),
     );
   }
 }
