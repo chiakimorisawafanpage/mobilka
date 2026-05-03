@@ -6,6 +6,7 @@ import '../screens/catalog_screen.dart';
 import '../screens/order_detail_screen.dart';
 import '../screens/orders_list_screen.dart';
 import '../screens/product_screen.dart';
+import '../screens/admin_screen.dart';
 import '../screens/profile_screen.dart';
 import '../theme.dart';
 import '../widgets/retro_y2k_background.dart';
@@ -87,6 +88,16 @@ class AppShell extends StatelessWidget {
                   );
                 },
               ),
+              Navigator(
+                key: ctrl.adminNavKey,
+                observers: [adminRouteObserver],
+                onGenerateRoute: (settings) {
+                  return MaterialPageRoute<void>(
+                    settings: settings,
+                    builder: (_) => const AdminScreen(),
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -116,6 +127,7 @@ class _WinTaskbar extends StatelessWidget {
     _NavItem(icon: Icons.shopping_cart, label: 'Cart'),
     _NavItem(icon: Icons.receipt_long, label: 'Orders'),
     _NavItem(icon: Icons.person, label: 'Profile'),
+    _NavItem(icon: Icons.admin_panel_settings, label: 'Admin'),
   ];
 
   @override
