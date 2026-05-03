@@ -1,7 +1,7 @@
 import 'products_seed.dart';
 
-/// Energy drinks scraped from https://sweet-shop.si/en/14-energy-drinks
-/// Images hosted on sweet-shop.si CDN.
+/// Energy drinks with product images from retail stores.
+/// Images sourced from Walmart, Kroger, Monster Energy, and other retailers.
 final List<ProductSeedRow> energyDrinksSeed = [
   const ProductSeedRow(
     title: 'Monster Energy — Pacific Punch',
@@ -16,7 +16,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Juice Monster — фруктовый удар из линейки Punch',
     imageLabel: 'PACIFIC PUNCH',
     gifUrl:
-        'https://sweet-shop.si/3360-large_default/monster-energy-pacific-punch-500-ml.jpg',
+        'https://i5.walmartimages.com/asr/6a0c2ade-cfd2-4ec6-b2ec-8bc68c4daacc.b1c1fa4b09abad1e449123578c5e58ba.jpeg',
     stock: 25,
   ),
   const ProductSeedRow(
@@ -32,7 +32,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Ultra серия — без сахара, максимум вкуса',
     imageLabel: 'ULTRA BLACK',
     gifUrl:
-        'https://sweet-shop.si/3190-large_default/monster-energy-ultra-black-500ml-eu.jpg',
+        'https://i5.walmartimages.com/asr/10a2b16b-3ceb-482e-8004-238f72854ae2.a61dd710a02491a6d68446bd0470f92f.jpeg',
     stock: 18,
   ),
   const ProductSeedRow(
@@ -48,7 +48,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Rehab — для восстановления после бессонной ночи',
     imageLabel: 'REHAB LEMONADE',
     gifUrl:
-        'https://sweet-shop.si/3361-large_default/monster-energy-rehab-lemonade-500ml-eu.jpg',
+        'https://i0.wp.com/vikingcocacola.com/wp-content/uploads/2020/12/Monster-Rehab-Lemonade-1.png',
     stock: 30,
   ),
   const ProductSeedRow(
@@ -64,7 +64,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Ultra Violet — виноградный взрыв без сахара',
     imageLabel: 'ULTRA VIOLET',
     gifUrl:
-        'https://sweet-shop.si/3089-large_default/monster-energy-ultra-violet-500ml-eu.jpg',
+        'https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_69e9b17f-25ef-4f72-9fd1-9a64a5811300.png',
     stock: 22,
   ),
   const ProductSeedRow(
@@ -80,7 +80,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Juice Monster — тропический рай',
     imageLabel: 'RIPPER',
     gifUrl:
-        'https://sweet-shop.si/3086-large_default/monster-energy-ripper-500ml-uk.jpg',
+        'https://web-assests.monsterenergy.com/mnst/231c4e82-d9dc-4a12-87e8-20d6564894a6.png',
     stock: 15,
   ),
   const ProductSeedRow(
@@ -96,7 +96,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Ultra Peachy Keen — персиковое лето',
     imageLabel: 'PEACHY KEEN',
     gifUrl:
-        'https://sweet-shop.si/3354-large_default/monster-energy-ultra-peachy-keen-500ml-eu.jpg',
+        'https://i5.walmartimages.com/seo/Monster-Ultra-Peachy-Keen-16-fl-oz_98fe6dbc-345c-4806-895a-c3ea0746183a.989d3864101f7bf7bdba361551551881.jpeg',
     stock: 20,
   ),
   const ProductSeedRow(
@@ -112,7 +112,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Bad Apple — запретный плод энергии',
     imageLabel: 'BAD APPLE',
     gifUrl:
-        'https://sweet-shop.si/3088-large_default/monster-energy-bad-apple-500ml-eu.jpg',
+        'https://www.kroger.com/product/images/large/front/0007084789956',
     stock: 12,
   ),
   const ProductSeedRow(
@@ -128,7 +128,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Nitro — кремовая текстура с азотом',
     imageLabel: 'NITRO',
     gifUrl:
-        'https://sweet-shop.si/3362-large_default/monster-energy-nitro-500ml-eu.jpg',
+        'https://www.kroger.com/product/images/large/front/0007084703775',
     stock: 16,
   ),
   const ProductSeedRow(
@@ -144,7 +144,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Ultra Watermelon — арбузная свежесть',
     imageLabel: 'ULTRA WATERMELON',
     gifUrl:
-        'https://sweet-shop.si/3205-large_default/monster-energy-ultra-watermelon-500ml-eu.jpg',
+        'https://groceries.morrisons.com/images-v3/4b85987b-1398-4173-a0c1-3546047c9d74/6a847da5-ae79-41d2-9083-9e6dc7a24866/500x500.jpg',
     stock: 28,
   ),
   const ProductSeedRow(
@@ -160,7 +160,7 @@ final List<ProductSeedRow> energyDrinksSeed = [
     eraNote: 'Rockstar Original — классика рок-энергетики',
     imageLabel: 'ROCKSTAR',
     gifUrl:
-        'https://sweet-shop.si/2926-large_default/rockstar-energy-drink-original-500ml.jpg',
+        'https://www.kroger.com/product/images/large/front/0081809400010',
     stock: 20,
   ),
 ];
