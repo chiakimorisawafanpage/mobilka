@@ -220,6 +220,12 @@ Future<Database> openAppDatabase() async {
       await db.execute('PRAGMA foreign_keys = ON');
       await _backfillProductGifUrls(db);
       await _seedIfEmpty(db);
+      for (final entry in _energyDrinkImageFixes.entries) {
+        await db.rawUpdate(
+          'UPDATE products SET gifUrl = ? WHERE title = ?',
+          [entry.value, entry.key],
+        );
+      }
     },
   );
 }
