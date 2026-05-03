@@ -1,0 +1,220 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
+
+import '../db/cart_repo.dart';
+import '../models/cart_line.dart';
+import '../navigation/app_shell_controller.dart';
+import '../navigation/route_observer.dart';
+import '../theme.dart';
+import '../widgets/retro_button.dart';
+import '../widgets/retro_input.dart';
+import '../widgets/retro_panel.dart';
+import '../widgets/product_thumb.dart';
+import 'checkout_screen.dart';
+
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> with RouteAware {
+  List<CartLine> _lines = [];
+  double _total = 0;
+  AppShellController? _shell;
+
+  Future<void> _reload() async {
+    final db = context.read<Database>();
+    final l = await getCartLines(db);
+    final t = await getCartTotal(db);
+    if (!mounted) return;
+    setState(() {
+      _lines = l;
+      _total = t;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute<dynamic>) {
+      appRouteObserver.subscribe(this, route);
+    }
+    final shell = context.read<AppShellController>();
+    if (!identical(shell, _shell)) {
+      _shell?.removeListener(_onShellChanged);
+      _shell = shell;
+      _shell!.addListener(_onShellChanged);
+    }
+  }
+
+  void _onShellChanged() {
+    if (_shell?.tab == 1) {
+      _reload();
+    }
+  }
+
+  @override
+  void dispose() {
+    _shell?.removeListener(_onShellChanged);
+    appRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    _reload();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _reload());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final db = context.read<Database>();
+
+    return Scaffold(
+      appBar: retroAppBar('КОРЗИНА', automaticallyImplyLeading: false),
+      body: Padding(
+        padding: const EdgeInsets.all(RetroSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RetroPanel(
+              title: 'КОРЗИНА',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ИТОГО: ${_total.toStringAsFixed(0)} ₽',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w900, color: RetroTheme.text),
+                  ),
+                  const SizedBox(height: RetroSpacing.sm),
+                  RetroButton(
+                    title: 'ОФОРМИТЬ ЗАКАЗ',
+                    disabled: _lines.isEmpty,
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).push<void>(
+                        MaterialPageRoute<void>(
+                            builder: (_) => const CheckoutScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: RetroSpacing.xs),
+                  RetroButton(
+                    title: 'ОЧИСТИТЬ КОРЗИНУ',
+                    variant: RetroButtonVariant.danger,
+                    disabled: _lines.isEmpty,
+                    onPressed: () async {
+                      await clearCart(db);
+                      await _reload();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: RetroSpacing.md),
+            Expanded(
+              child: _lines.isEmpty
+                  ? const Text(
+                      'ПУСТО. КАК СТАРЫЙ САЙТ БЕЗ КОНТЕНТА.',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w800, color: RetroTheme.text),
+                    )
+                  : ListView.separated(
+                      itemCount: _lines.length,
+                      separatorBuilder: (_, __) =>
+                          const SizedBox(height: RetroSpacing.sm),
+                      itemBuilder: (context, i) {
+                        final item = _lines[i];
+                        return RetroPanel(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.title.toUpperCase(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: RetroTheme.text),
+                              ),
+                              const SizedBox(height: RetroSpacing.xs),
+                              ProductThumb(
+                                  label: item.imageLabel,
+                                  gifUrl: item.gifUrl,
+                                  height: 76),
+                              const SizedBox(height: RetroSpacing.xs),
+                              Text(
+                                '${item.brand.toUpperCase()} · ${item.volumeMl} мл · ${item.price.toStringAsFixed(0)} ₽/шт',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    color: RetroTheme.muted),
+                              ),
+                              const SizedBox(height: RetroSpacing.xs),
+                              Text(
+                                'ПОДИТОГ: ${(item.qty * item.price).toStringAsFixed(0)} ₽',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: RetroTheme.text),
+                              ),
+                              const SizedBox(height: RetroSpacing.sm),
+                              RetroInput(
+                                label: 'КОЛ-ВО',
+                                value: '${item.qty}',
+                                keyboardType: TextInputType.number,
+                                onChanged: (t) async {
+                                  final n = double.tryParse(t);
+                                  if (n == null || !n.isFinite) return;
+                                  await setCartQty(
+                                      db, item.productId, n.floor());
+                                  await _reload();
+                                },
+                              ),
+                              Wrap(
+                                spacing: RetroSpacing.sm,
+                                runSpacing: RetroSpacing.sm,
+                                children: [
+                                  RetroButton(
+                                    title: '-1',
+                                    onPressed: () async {
+                                      await setCartQty(
+                                          db, item.productId, item.qty - 1);
+                                      await _reload();
+                                    },
+                                  ),
+                                  RetroButton(
+                                    title: '+1',
+                                    onPressed: () async {
+                                      await setCartQty(
+                                          db, item.productId, item.qty + 1);
+                                      await _reload();
+                                    },
+                                  ),
+                                  RetroButton(
+                                    title: 'УДАЛИТЬ',
+                                    variant: RetroButtonVariant.danger,
+                                    onPressed: () async {
+                                      await removeFromCart(db, item.productId);
+                                      await _reload();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
