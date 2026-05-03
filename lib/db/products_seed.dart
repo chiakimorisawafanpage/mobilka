@@ -21,6 +21,7 @@ class ProductSeedRow {
     required this.eraNote,
     required this.imageLabel,
     required this.gifUrl,
+    this.stock = 20,
   });
 
   final String title;
@@ -33,6 +34,7 @@ class ProductSeedRow {
   final String eraNote;
   final String imageLabel;
   final String gifUrl;
+  final int stock;
 }
 
 final List<ProductSeedRow> productsSeed = [
