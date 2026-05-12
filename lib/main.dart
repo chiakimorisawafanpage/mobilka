@@ -8,6 +8,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'db/app_database.dart';
 import 'navigation/app_shell.dart';
 import 'navigation/app_shell_controller.dart';
+import 'providers/auth_provider.dart';
 import 'theme.dart';
 
 Future<void> main() async {
@@ -32,6 +33,8 @@ class RetroEnergyApp extends StatelessWidget {
         Provider<Database>.value(value: database),
         ChangeNotifierProvider<AppShellController>(
             create: (_) => AppShellController()),
+        ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider(database)),
       ],
       child: MaterialApp(
         title: 'Retro Energy Shop',

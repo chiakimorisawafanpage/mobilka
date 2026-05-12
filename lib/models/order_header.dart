@@ -4,6 +4,7 @@ import 'payment_method.dart';
 class OrderHeader {
   const OrderHeader({
     required this.id,
+    this.userId,
     required this.createdAt,
     required this.total,
     required this.address,
@@ -13,6 +14,7 @@ class OrderHeader {
   });
 
   final int id;
+  final int? userId;
   final String createdAt;
   final double total;
   final String address;
@@ -23,6 +25,9 @@ class OrderHeader {
   factory OrderHeader.fromMap(Map<String, Object?> map) {
     return OrderHeader(
       id: (map['id'] as int?) ?? (map['id'] as num?)!.toInt(),
+      userId: map['userId'] != null
+          ? (map['userId'] as int?) ?? (map['userId'] as num?)!.toInt()
+          : null,
       createdAt: map['createdAt']! as String,
       total: (map['total'] as num?)!.toDouble(),
       address: map['address']! as String,

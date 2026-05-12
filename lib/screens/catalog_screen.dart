@@ -118,6 +118,8 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final db = context.read<Database>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth > 600;
 
     final brandOptions = [
       const RetroSelectOption<String>(value: 'any', label: 'ALL BRANDS'),
@@ -133,7 +135,10 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
     return Scaffold(
       appBar: retroAppBar('CATALOG', automaticallyImplyLeading: false),
       body: ListView(
-        padding: const EdgeInsets.all(RetroSpacing.md),
+        padding: EdgeInsets.symmetric(
+          horizontal: isWide ? 24.0 : RetroSpacing.md,
+          vertical: RetroSpacing.md,
+        ),
         children: [
           const RetroMarquee(
             text:
@@ -159,24 +164,59 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RetroInput(
-                  label: 'SEARCH',
-                  value: _search,
-                  onChanged: (t) => setState(() => _search = t),
-                  placeholder: 'monster / burn / cola...',
-                ),
-                RetroSelect<String>(
-                  label: 'BRAND',
-                  value: _brand,
-                  options: brandOptions,
-                  onChanged: (v) => setState(() => _brand = v),
-                ),
-                RetroSelect<String>(
-                  label: 'FLAVOR',
-                  value: _flavor,
-                  options: flavorOptions,
-                  onChanged: (v) => setState(() => _flavor = v),
-                ),
+                if (isWide)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: RetroInput(
+                          label: 'SEARCH',
+                          value: _search,
+                          onChanged: (t) => setState(() => _search = t),
+                          placeholder: 'monster / burn / cola...',
+                        ),
+                      ),
+                      const SizedBox(width: RetroSpacing.sm),
+                      Expanded(
+                        child: RetroSelect<String>(
+                          label: 'BRAND',
+                          value: _brand,
+                          options: brandOptions,
+                          onChanged: (v) => setState(() => _brand = v),
+                        ),
+                      ),
+                      const SizedBox(width: RetroSpacing.sm),
+                      Expanded(
+                        child: RetroSelect<String>(
+                          label: 'FLAVOR',
+                          value: _flavor,
+                          options: flavorOptions,
+                          onChanged: (v) => setState(() => _flavor = v),
+                        ),
+                      ),
+                    ],
+                  )
+                else ...[
+                  RetroInput(
+                    label: 'SEARCH',
+                    value: _search,
+                    onChanged: (t) => setState(() => _search = t),
+                    placeholder: 'monster / burn / cola...',
+                  ),
+                  RetroSelect<String>(
+                    label: 'BRAND',
+                    value: _brand,
+                    options: brandOptions,
+                    onChanged: (v) => setState(() => _brand = v),
+                  ),
+                  RetroSelect<String>(
+                    label: 'FLAVOR',
+                    value: _flavor,
+                    options: flavorOptions,
+                    onChanged: (v) => setState(() => _flavor = v),
+                  ),
+                ],
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -197,14 +237,26 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                         keyboardType: TextInputType.number,
                       ),
                     ),
+                    if (isWide) ...[
+                      const SizedBox(width: RetroSpacing.sm),
+                      Expanded(
+                        child: RetroSelect<ProductSort>(
+                          label: 'SORT BY',
+                          value: _sort,
+                          options: _sortOptions,
+                          onChanged: (v) => setState(() => _sort = v),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
-                RetroSelect<ProductSort>(
-                  label: 'SORT BY',
-                  value: _sort,
-                  options: _sortOptions,
-                  onChanged: (v) => setState(() => _sort = v),
-                ),
+                if (!isWide)
+                  RetroSelect<ProductSort>(
+                    label: 'SORT BY',
+                    value: _sort,
+                    options: _sortOptions,
+                    onChanged: (v) => setState(() => _sort = v),
+                  ),
                 Wrap(
                   spacing: RetroSpacing.sm,
                   runSpacing: RetroSpacing.sm,
@@ -241,109 +293,10 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
             ),
           ),
           const SizedBox(height: RetroSpacing.sm),
-          ..._products.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: RetroSpacing.sm),
-              child: RetroPanel(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed('/product', arguments: item.id);
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.title.toUpperCase(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'monospace',
-                              color: RetroTheme.link,
-                              decoration: TextDecoration.underline,
-                              decorationColor: RetroTheme.link,
-                            ),
-                          ),
-                          const SizedBox(height: RetroSpacing.xs),
-                          ProductThumb(
-                              label: item.imageLabel, gifUrl: item.gifUrl),
-                          const SizedBox(height: RetroSpacing.xs),
-                          Text(
-                            '${item.brand.toUpperCase()} \u00B7 ${item.flavor.toUpperCase()} \u00B7 ${item.volumeMl} ml',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontFamily: 'monospace',
-                              color: RetroTheme.muted,
-                            ),
-                          ),
-                          const SizedBox(height: RetroSpacing.xs),
-                          Text(
-                            '${item.price.toStringAsFixed(0)} \u20BD',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'monospace',
-                              color: RetroTheme.accentBlue,
-                            ),
-                          ),
-                          const SizedBox(height: RetroSpacing.xs),
-                          Text(item.eraNote,
-                              style: const TextStyle(
-                                color: RetroTheme.muted,
-                                fontFamily: 'monospace',
-                                fontSize: 11,
-                                fontStyle: FontStyle.italic,
-                              )),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: RetroSpacing.sm),
-                    Wrap(
-                      spacing: RetroSpacing.sm,
-                      runSpacing: RetroSpacing.sm,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        RetroButton(
-                          title: 'ADD TO CART (+1)',
-                          onPressed: () async {
-                            try {
-                              await addToCart(db, item.id, 1);
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Item added! Check CART tab.'),
-                                  duration: Duration(milliseconds: 1200),
-                                ),
-                              );
-                            } catch (e) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Error: $e'),
-                                  backgroundColor: RetroTheme.danger,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        RetroButton(
-                          title: 'DETAILS',
-                          variant: RetroButtonVariant.link,
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed('/product', arguments: item.id);
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          if (isWide)
+            _buildProductGrid(db, screenWidth)
+          else
+            ..._products.map((item) => _buildProductCard(db, item)),
           const RainbowDivider(),
           const Center(child: GeocitiesHitCounter()),
           const SizedBox(height: RetroSpacing.sm),
@@ -352,6 +305,130 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
           const Center(child: GeocitiesWebring()),
           const SizedBox(height: RetroSpacing.lg),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProductGrid(Database db, double screenWidth) {
+    final crossAxisCount = screenWidth > 900 ? 3 : 2;
+    final rows = <Widget>[];
+    for (var i = 0; i < _products.length; i += crossAxisCount) {
+      final rowItems = <Widget>[];
+      for (var j = 0; j < crossAxisCount; j++) {
+        if (i + j < _products.length) {
+          rowItems.add(
+            Expanded(child: _buildProductCard(db, _products[i + j])),
+          );
+        } else {
+          rowItems.add(const Expanded(child: SizedBox()));
+        }
+        if (j < crossAxisCount - 1) {
+          rowItems.add(const SizedBox(width: RetroSpacing.sm));
+        }
+      }
+      rows.add(Padding(
+        padding: const EdgeInsets.only(bottom: RetroSpacing.sm),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: rowItems,
+        ),
+      ));
+    }
+    return Column(children: rows);
+  }
+
+  Widget _buildProductCard(Database db, Product item) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: RetroSpacing.sm),
+      child: RetroPanel(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed('/product', arguments: item.id);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title.toUpperCase(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: RetroTheme.link,
+                      decoration: TextDecoration.underline,
+                      decorationColor: RetroTheme.link,
+                    ),
+                  ),
+                  const SizedBox(height: RetroSpacing.xs),
+                  ProductThumb(
+                      label: item.imageLabel, gifUrl: item.gifUrl),
+                  const SizedBox(height: RetroSpacing.xs),
+                  Text(
+                    '${item.brand.toUpperCase()} \u00B7 ${item.flavor.toUpperCase()} \u00B7 ${item.volumeMl} ml',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontFamily: 'monospace',
+                      color: RetroTheme.muted,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: RetroSpacing.xs),
+                  Text(
+                    '${item.price.toStringAsFixed(0)} \u20BD',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: RetroTheme.accentBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: RetroSpacing.sm),
+            Wrap(
+              spacing: RetroSpacing.sm,
+              runSpacing: RetroSpacing.sm,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                RetroButton(
+                  title: 'ADD TO CART',
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    try {
+                      await addToCart(db, item.id, 1);
+                      messenger.showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Item added! Check CART tab.'),
+                          duration: Duration(milliseconds: 1200),
+                        ),
+                      );
+                    } catch (e) {
+                      messenger.showSnackBar(
+                        SnackBar(
+                          content: Text('Error: $e'),
+                          backgroundColor: RetroTheme.danger,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                RetroButton(
+                  title: 'DETAILS',
+                  variant: RetroButtonVariant.link,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed('/product', arguments: item.id);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

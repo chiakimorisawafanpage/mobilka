@@ -41,14 +41,25 @@ CREATE TABLE IF NOT EXISTS cart_items (
   FOREIGN KEY (productId) REFERENCES products(id) ON DELETE CASCADE
 )''');
   await db.execute('''
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  passwordHash TEXT NOT NULL DEFAULT '',
+  name TEXT NOT NULL,
+  googleId TEXT,
+  createdAt TEXT NOT NULL
+)''');
+  await db.execute('''
 CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  userId INTEGER,
   createdAt TEXT NOT NULL,
   total REAL NOT NULL,
   address TEXT NOT NULL,
   comment TEXT,
   paymentMethod TEXT NOT NULL,
-  status TEXT NOT NULL
+  status TEXT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id)
 )''');
   await db.execute('''
 CREATE TABLE IF NOT EXISTS order_items (
@@ -136,7 +147,7 @@ Future<Database> openAppDatabase() async {
 
   return openDatabase(
     path,
-    version: 3,
+    version: 4,
     onConfigure: (db) async {
       await db.execute('PRAGMA foreign_keys = ON');
     },
@@ -152,6 +163,23 @@ Future<Database> openAppDatabase() async {
       }
       if (oldVersion < 3) {
         await db.execute('ALTER TABLE products ADD COLUMN gifUrl TEXT');
+      }
+      if (oldVersion < 4) {
+        await db.execute('''
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  passwordHash TEXT NOT NULL DEFAULT '',
+  name TEXT NOT NULL,
+  googleId TEXT,
+  createdAt TEXT NOT NULL
+)''');
+        // Add userId column to orders (nullable for old orders)
+        try {
+          await db.execute('ALTER TABLE orders ADD COLUMN userId INTEGER');
+        } catch (_) {
+          // column may already exist
+        }
       }
       await _backfillProductGifUrls(db);
       await _seedIfEmpty(db);
