@@ -26,6 +26,10 @@ class _OrdersListScreenState extends State<OrdersListScreen> with RouteAware {
   Future<void> _reload() async {
     final db = context.read<Database>();
     final auth = context.read<AuthProvider>();
+    if (!auth.isLoggedIn) {
+      if (mounted) setState(() => _orders = []);
+      return;
+    }
     final o = await listOrders(db, userId: auth.user?.id);
     if (!mounted) return;
     setState(() => _orders = o);
