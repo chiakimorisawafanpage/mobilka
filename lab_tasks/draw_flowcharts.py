@@ -1,0 +1,640 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.patches import FancyBboxPatch
+import os
+import numpy as np
+
+OUT_DIR = os.path.join(os.path.dirname(__file__), "block_schemes")
+os.makedirs(OUT_DIR, exist_ok=True)
+
+def new_fig(title, h=12, w=6):
+    fig, ax = plt.subplots(figsize=(w, h))
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, h)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    ax.set_title(title, fontsize=13, fontweight='bold', pad=10)
+    return fig, ax
+
+def oval(ax, cx, cy, text, w=2.4, h=0.6):
+    e = patches.Ellipse((cx, cy), w, h, facecolor='#e8f5e9', edgecolor='black', lw=1.5)
+    ax.add_patch(e)
+    ax.text(cx, cy, text, ha='center', va='center', fontsize=10, fontweight='bold')
+    return cy
+
+def rect(ax, cx, cy, text, w=3.2, h=0.7):
+    r = FancyBboxPatch((cx - w/2, cy - h/2), w, h, boxstyle="round,pad=0.05",
+                        facecolor='#e3f2fd', edgecolor='black', lw=1.5)
+    ax.add_patch(r)
+    ax.text(cx, cy, text, ha='center', va='center', fontsize=9)
+    return cy
+
+def para(ax, cx, cy, text, w=3.2, h=0.7):
+    dx = 0.3
+    xs = [cx - w/2 + dx, cx + w/2 + dx, cx + w/2 - dx, cx - w/2 - dx]
+    ys = [cy - h/2, cy - h/2, cy + h/2, cy + h/2]
+    ax.fill(xs, ys, facecolor='#fff9c4', edgecolor='black', lw=1.5)
+    ax.text(cx, cy, text, ha='center', va='center', fontsize=9)
+    return cy
+
+def diamond(ax, cx, cy, text, w=3.0, h=1.0):
+    xs = [cx, cx + w/2, cx, cx - w/2]
+    ys = [cy + h/2, cy, cy - h/2, cy]
+    ax.fill(xs, ys, facecolor='#fce4ec', edgecolor='black', lw=1.5)
+    ax.text(cx, cy, text, ha='center', va='center', fontsize=8)
+    return cy
+
+def arrow(ax, x1, y1, x2, y2, label=""):
+    ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
+                arrowprops=dict(arrowstyle='->', lw=1.2, color='black'))
+    if label:
+        mx, my = (x1+x2)/2, (y1+y2)/2
+        ax.text(mx + 0.15, my, label, fontsize=8, color='red')
+
+def save(fig, name):
+    fig.savefig(os.path.join(OUT_DIR, name), dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close(fig)
+    print(f"  Saved: {name}")
+
+# ===================== РАЗДЕЛ 1 =====================
+
+def r1_z1():
+    fig, ax = new_fig("Раздел 1. Задача 1\nПлощадь треугольника по координатам вершин")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: x1,y1, x2,y2, x3,y3")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "S = ½|x1(y2-y3)+x2(y3-y1)+x3(y1-y2)|")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: S")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r1_z1.png")
+
+def r1_z2():
+    fig, ax = new_fig("Раздел 1. Задача 2\nВычислить y = ax + b")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a, x, b")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "y = a * x + b")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: y")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r1_z2.png")
+
+def r1_z3():
+    fig, ax = new_fig("Раздел 1. Задача 3\nПеревод байтов в крупные единицы")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: A (байты)")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "KB = A / 1024")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    rect(ax, cx, 7.2, "MB = KB / 1024")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    rect(ax, cx, 5.9, "GB = MB / 1024")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    para(ax, cx, 4.6, "Вывод: KB, MB, GB")
+    arrow(ax, cx, 4.25, cx, 3.65)
+    oval(ax, cx, 3.4, "Конец")
+    save(fig, "r1_z3.png")
+
+def r1_z5():
+    fig, ax = new_fig("Раздел 1. Задача 5\nПуть лодки")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: v, v1, t1, t2")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "S1 = v * t1")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    rect(ax, cx, 7.2, "S2 = (v - v1) * t2")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    rect(ax, cx, 5.9, "S = S1 + S2")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    para(ax, cx, 4.6, "Вывод: S")
+    arrow(ax, cx, 4.25, cx, 3.65)
+    oval(ax, cx, 3.4, "Конец")
+    save(fig, "r1_z5.png")
+
+def r1_z6():
+    fig, ax = new_fig("Раздел 1. Задача 6\nВычислить Y при X=2", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    rect(ax, cx, 11.8, "X = 2")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "Z = 8 * X")
+    arrow(ax, cx, 10.15, cx, 9.55)
+    rect(ax, cx, 9.2, "Z = √Z")
+    arrow(ax, cx, 8.85, cx, 8.25)
+    rect(ax, cx, 7.9, "Z = Z - 1")
+    arrow(ax, cx, 7.55, cx, 6.95)
+    rect(ax, cx, 6.6, "Y = 3 * X")
+    arrow(ax, cx, 6.25, cx, 5.65)
+    rect(ax, cx, 5.3, "Y = Y / Z")
+    arrow(ax, cx, 4.95, cx, 4.35)
+    para(ax, cx, 4.0, "Вывод: Y")
+    arrow(ax, cx, 3.65, cx, 3.05)
+    oval(ax, cx, 2.8, "Конец")
+    save(fig, "r1_z6.png")
+
+def r1_z7():
+    fig, ax = new_fig("Раздел 1. Задача 7\nПериметр прямоугольного треугольника")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a, b")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "c = √(a² + b²)")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    rect(ax, cx, 7.2, "P = a + b + c")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    para(ax, cx, 5.9, "Вывод: P")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    oval(ax, cx, 4.7, "Конец")
+    save(fig, "r1_z7.png")
+
+def r1_z8():
+    fig, ax = new_fig("Раздел 1. Задача 8\nСумма, разность, произведение, частное")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a, b")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "s=a+b, r=a-b, p=a*b, q=a/b")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: s, r, p, q")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r1_z8.png")
+
+def r1_z9():
+    fig, ax = new_fig("Раздел 1. Задача 9\nВысота правильного треугольника")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "h = a * √3 / 2")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: h")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r1_z9.png")
+
+def r1_z10():
+    fig, ax = new_fig("Раздел 1. Задача 10\nКоличество полных килобайтов")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: размер (байты)")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "KB = размер // 1024")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: KB")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r1_z10.png")
+
+def r1_z11():
+    fig, ax = new_fig("Раздел 1. Задача 11\nВычислить выражения по формулам", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: t, l, p, y, n, c")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "R = 3t² + 3l⁵ + 4.9")
+    arrow(ax, cx, 10.15, cx, 9.55)
+    rect(ax, cx, 9.2, "K = ln(p² + y³) + eᵖ")
+    arrow(ax, cx, 8.85, cx, 8.25)
+    rect(ax, cx, 7.9, "G = n(y + 3.5) + √y")
+    arrow(ax, cx, 7.55, cx, 6.95)
+    rect(ax, cx, 6.6, "N = 3y² + √(y+1)")
+    arrow(ax, cx, 6.25, cx, 5.65)
+    para(ax, cx, 5.3, "Вывод: R, K, G, N")
+    arrow(ax, cx, 4.95, cx, 4.35)
+    oval(ax, cx, 4.1, "Конец")
+    save(fig, "r1_z11.png")
+
+def r1_z14():
+    fig, ax = new_fig("Раздел 1. Задача 14\nСравнить два числа, большее /2, меньшее -2", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: a, b")
+    arrow(ax, cx, 11.45, cx, 10.55)
+    diamond(ax, cx, 10.0, "a > b ?")
+    arrow(ax, 3.5, 10.0, 2, 9.0, "Да")
+    arrow(ax, 6.5, 10.0, 8, 9.0, "Нет")
+    rect(ax, 2, 8.6, "a = a / 2", w=2.5)
+    rect(ax, 8, 8.6, "a = a - 2", w=2.5)
+    rect(ax, 2, 7.5, "b = b - 2", w=2.5)
+    rect(ax, 8, 7.5, "b = b / 2", w=2.5)
+    arrow(ax, 2, 8.25, 2, 7.85)
+    arrow(ax, 8, 8.25, 8, 7.85)
+    arrow(ax, 2, 7.15, cx, 6.3)
+    arrow(ax, 8, 7.15, cx, 6.3)
+    para(ax, cx, 5.9, "Вывод: a, b")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    oval(ax, cx, 4.7, "Конец")
+    save(fig, "r1_z14.png")
+
+def r1_z15():
+    fig, ax = new_fig("Раздел 1. Задача 15\nНаибольшее из трёх чисел", h=16)
+    cx = 5
+    oval(ax, cx, 15, "Начало")
+    arrow(ax, cx, 14.7, cx, 14.1)
+    para(ax, cx, 13.8, "Ввод: a, b, c")
+    arrow(ax, cx, 13.45, cx, 12.55)
+    diamond(ax, cx, 12.0, "a > b ?")
+    arrow(ax, 3.5, 12.0, 2.5, 11.0, "Да")
+    arrow(ax, 6.5, 12.0, 7.5, 11.0, "Нет")
+    diamond(ax, 2.5, 10.5, "a > c ?", w=2.5, h=0.8)
+    diamond(ax, 7.5, 10.5, "b > c ?", w=2.5, h=0.8)
+    arrow(ax, 1.25, 10.5, 0.8, 9.5, "Да")
+    arrow(ax, 3.75, 10.5, 4.2, 9.5, "Нет")
+    arrow(ax, 6.25, 10.5, 5.8, 9.5, "Да")
+    arrow(ax, 8.75, 10.5, 9.2, 9.5, "Нет")
+    rect(ax, 0.8, 9.1, "max=a", w=1.4, h=0.6)
+    rect(ax, 4.2, 9.1, "max=c", w=1.4, h=0.6)
+    rect(ax, 5.8, 9.1, "max=b", w=1.4, h=0.6)
+    rect(ax, 9.2, 9.1, "max=c", w=1.4, h=0.6)
+    arrow(ax, 0.8, 8.8, cx, 7.9)
+    arrow(ax, 4.2, 8.8, cx, 7.9)
+    arrow(ax, 5.8, 8.8, cx, 7.9)
+    arrow(ax, 9.2, 8.8, cx, 7.9)
+    para(ax, cx, 7.5, "Вывод: max")
+    arrow(ax, cx, 7.15, cx, 6.55)
+    oval(ax, cx, 6.3, "Конец")
+    save(fig, "r1_z15.png")
+
+def r1_z16():
+    fig, ax = new_fig("Раздел 1. Задача 16\nВычислить кусочную функцию", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: x")
+    arrow(ax, cx, 11.45, cx, 10.55)
+    diamond(ax, cx, 10.0, "x > 0 ?")
+    arrow(ax, 3.5, 10.0, 2.5, 9.0, "Да")
+    arrow(ax, 6.5, 10.0, 7.5, 9.0, "Нет")
+    rect(ax, 2.5, 8.6, "y = x²", w=2)
+    diamond(ax, 7.5, 8.5, "x = 0 ?", w=2.5, h=0.8)
+    arrow(ax, 6.25, 8.5, 5.5, 7.5, "Да")
+    arrow(ax, 8.75, 8.5, 9, 7.5, "Нет")
+    rect(ax, 5.5, 7.1, "y = 0", w=1.8)
+    rect(ax, 9, 7.1, "y = -x", w=1.8)
+    arrow(ax, 2.5, 8.25, cx, 5.9)
+    arrow(ax, 5.5, 6.75, cx, 5.9)
+    arrow(ax, 9, 6.75, cx, 5.9)
+    para(ax, cx, 5.5, "Вывод: y")
+    arrow(ax, cx, 5.15, cx, 4.55)
+    oval(ax, cx, 4.3, "Конец")
+    save(fig, "r1_z16.png")
+
+def r1_z23():
+    fig, ax = new_fig("Раздел 1. Задача 23\nСумма квадратов vs квадрат суммы", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: a, b")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "S1 = a² + b²")
+    arrow(ax, cx, 10.15, cx, 9.55)
+    rect(ax, cx, 9.2, "S2 = (a + b)²")
+    arrow(ax, cx, 8.85, cx, 8.0)
+    diamond(ax, cx, 7.5, "S1 > S2 ?")
+    arrow(ax, 3.5, 7.5, 2.5, 6.5, "Да")
+    arrow(ax, 6.5, 7.5, 7.5, 6.5, "Нет")
+    para(ax, 2.5, 6.1, "Сумма кв. >", w=2.5)
+    para(ax, 7.5, 6.1, "Кв. суммы >=", w=2.5)
+    arrow(ax, 2.5, 5.75, cx, 4.9)
+    arrow(ax, 7.5, 5.75, cx, 4.9)
+    oval(ax, cx, 4.5, "Конец")
+    save(fig, "r1_z23.png")
+
+def r1_z24():
+    fig, ax = new_fig("Раздел 1. Задача 24\nПрямоугольный ли треугольник?", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: a, b, c")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "Найти max(a,b,c) → гипот.", w=3.5)
+    arrow(ax, cx, 10.15, cx, 9.2)
+    diamond(ax, cx, 8.7, "гипот² = кат1² + кат2² ?", w=4)
+    arrow(ax, 3.0, 8.7, 2.0, 7.5, "Да")
+    arrow(ax, 7.0, 8.7, 8.0, 7.5, "Нет")
+    para(ax, 2.0, 7.1, "Прямоуг.", w=2.2)
+    para(ax, 8.0, 7.1, "Не прямоуг.", w=2.5)
+    arrow(ax, 2.0, 6.75, cx, 5.9)
+    arrow(ax, 8.0, 6.75, cx, 5.9)
+    oval(ax, cx, 5.5, "Конец")
+    save(fig, "r1_z24.png")
+
+def r1_z25():
+    fig, ax = new_fig("Раздел 1. Задача 25\nВозвести A в степень N (цикл)", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: A, N")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "result = 1, i = 1")
+    arrow(ax, cx, 10.15, cx, 9.2)
+    diamond(ax, cx, 8.7, "i <= N ?")
+    arrow(ax, 6.5, 8.7, 8, 8.7, "Нет")
+    arrow(ax, cx, 8.2, cx, 7.55)
+    rect(ax, cx, 7.2, "result = result * A")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    rect(ax, cx, 5.9, "i = i + 1")
+    arrow(ax, 2, 5.9, 2, 8.7)
+    arrow(ax, cx, 5.55, 2, 5.9)
+    arrow(ax, 2, 8.7, 3.5, 8.7)
+    para(ax, 8, 8.3, "Вывод: result", w=2.5)
+    arrow(ax, 8, 7.95, 8, 7.35)
+    oval(ax, 8, 7.1, "Конец")
+    save(fig, "r1_z25.png")
+
+def r1_z26():
+    fig, ax = new_fig("Раздел 1. Задача 26\nФакториал числа N (цикл)", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: N")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "F = 1, i = 1")
+    arrow(ax, cx, 10.15, cx, 9.2)
+    diamond(ax, cx, 8.7, "i <= N ?")
+    arrow(ax, 6.5, 8.7, 8, 8.7, "Нет")
+    arrow(ax, cx, 8.2, cx, 7.55)
+    rect(ax, cx, 7.2, "F = F * i")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    rect(ax, cx, 5.9, "i = i + 1")
+    arrow(ax, cx, 5.55, 2, 5.9)
+    arrow(ax, 2, 5.9, 2, 8.7)
+    arrow(ax, 2, 8.7, 3.5, 8.7)
+    para(ax, 8, 8.3, "Вывод: F", w=2.2)
+    arrow(ax, 8, 7.95, 8, 7.35)
+    oval(ax, 8, 7.1, "Конец")
+    save(fig, "r1_z26.png")
+
+# ===================== РАЗДЕЛ 2 =====================
+
+def r2_z1():
+    fig, ax = new_fig("Раздел 2. Задача 1\nПлощадь треугольника (формула Герона)")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a, b, c")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "p = (a+b+c) / 2")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    rect(ax, cx, 7.2, "S = √(p(p-a)(p-b)(p-c))")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    para(ax, cx, 5.9, "Вывод: P=a+b+c, S")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    oval(ax, cx, 4.7, "Конец")
+    save(fig, "r2_z1.png")
+
+def r2_z2():
+    fig, ax = new_fig("Раздел 2. Задача 2\ny = ax + b")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a, x, b")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "y = a * x + b")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: y")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r2_z2.png")
+
+def r2_z3():
+    fig, ax = new_fig("Раздел 2. Задача 3\nПериметр прямоуг. треугольника")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a, b (катеты)")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "c = √(a² + b²)")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    rect(ax, cx, 7.2, "P = a + b + c")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    para(ax, cx, 5.9, "Вывод: c, P")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    oval(ax, cx, 4.7, "Конец")
+    save(fig, "r2_z3.png")
+
+def r2_z4():
+    fig, ax = new_fig("Раздел 2. Задача 4\nПлощадь квадрата")
+    cx = 5
+    oval(ax, cx, 11, "Начало")
+    arrow(ax, cx, 10.7, cx, 10.1)
+    para(ax, cx, 9.8, "Ввод: a")
+    arrow(ax, cx, 9.45, cx, 8.85)
+    rect(ax, cx, 8.5, "S = a * a")
+    arrow(ax, cx, 8.15, cx, 7.55)
+    para(ax, cx, 7.2, "Вывод: S")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    oval(ax, cx, 6, "Конец")
+    save(fig, "r2_z4.png")
+
+def r2_z5():
+    fig, ax = new_fig("Раздел 2. Задача 5\na/b - c/d (b>0, d>0)", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: a, b, c, d")
+    arrow(ax, cx, 11.45, cx, 10.55)
+    diamond(ax, cx, 10.0, "b > 0 и d > 0 ?")
+    arrow(ax, 3.5, 10.0, 2.5, 9.0, "Да")
+    arrow(ax, 6.5, 10.0, 7.5, 9.0, "Нет")
+    rect(ax, 2.5, 8.6, "R = a/b - c/d", w=2.5)
+    para(ax, 7.5, 8.6, "Ошибка!", w=2)
+    arrow(ax, 2.5, 8.25, 2.5, 7.55)
+    para(ax, 2.5, 7.2, "Вывод: R", w=2)
+    arrow(ax, 2.5, 6.85, cx, 5.9)
+    arrow(ax, 7.5, 8.25, cx, 5.9)
+    oval(ax, cx, 5.5, "Конец")
+    save(fig, "r2_z5.png")
+
+def r2_z6():
+    fig, ax = new_fig("Раздел 2. Задача 6\nУвеличить/уменьшить X на 10", h=13)
+    cx = 5
+    oval(ax, cx, 12, "Начало")
+    arrow(ax, cx, 11.7, cx, 11.1)
+    para(ax, cx, 10.8, "Ввод: X")
+    arrow(ax, cx, 10.45, cx, 9.55)
+    diamond(ax, cx, 9.0, "X > 0 ?")
+    arrow(ax, 3.5, 9.0, 2.5, 8.0, "Да")
+    arrow(ax, 6.5, 9.0, 7.5, 8.0, "Нет")
+    rect(ax, 2.5, 7.6, "X = X + 10", w=2.5)
+    rect(ax, 7.5, 7.6, "X = X - 10", w=2.5)
+    arrow(ax, 2.5, 7.25, cx, 6.3)
+    arrow(ax, 7.5, 7.25, cx, 6.3)
+    para(ax, cx, 5.9, "Вывод: X")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    oval(ax, cx, 4.7, "Конец")
+    save(fig, "r2_z6.png")
+
+def r2_z7():
+    fig, ax = new_fig("Раздел 2. Задача 7\nРазделить на 2 или умножить на 5", h=13)
+    cx = 5
+    oval(ax, cx, 12, "Начало")
+    arrow(ax, cx, 11.7, cx, 11.1)
+    para(ax, cx, 10.8, "Ввод: X")
+    arrow(ax, cx, 10.45, cx, 9.55)
+    diamond(ax, cx, 9.0, "X > 20 ?")
+    arrow(ax, 3.5, 9.0, 2.5, 8.0, "Да")
+    arrow(ax, 6.5, 9.0, 7.5, 8.0, "Нет")
+    rect(ax, 2.5, 7.6, "X = X / 2", w=2.5)
+    rect(ax, 7.5, 7.6, "X = X * 5", w=2.5)
+    arrow(ax, 2.5, 7.25, cx, 6.3)
+    arrow(ax, 7.5, 7.25, cx, 6.3)
+    para(ax, cx, 5.9, "Вывод: X")
+    arrow(ax, cx, 5.55, cx, 4.95)
+    oval(ax, cx, 4.7, "Конец")
+    save(fig, "r2_z7.png")
+
+def r2_z8():
+    fig, ax = new_fig("Раздел 2. Задача 8\nКусочная функция (3 условия)", h=15)
+    cx = 5
+    oval(ax, cx, 14, "Начало")
+    arrow(ax, cx, 13.7, cx, 13.1)
+    para(ax, cx, 12.8, "Ввод: x")
+    arrow(ax, cx, 12.45, cx, 11.55)
+    diamond(ax, cx, 11.0, "x > 0 ?")
+    arrow(ax, 3.5, 11.0, 2, 10.0, "Да")
+    arrow(ax, 6.5, 11.0, 7.5, 10.0, "Нет")
+    rect(ax, 2, 9.6, "y = √x", w=2)
+    diamond(ax, 7.5, 9.5, "x = 0 ?", w=2.5, h=0.8)
+    arrow(ax, 6.25, 9.5, 5.5, 8.5, "Да")
+    arrow(ax, 8.75, 9.5, 9.2, 8.5, "Нет")
+    rect(ax, 5.5, 8.1, "y = 0", w=1.8)
+    rect(ax, 9.2, 8.1, "y = x²", w=1.8)
+    arrow(ax, 2, 9.25, cx, 7.0)
+    arrow(ax, 5.5, 7.75, cx, 7.0)
+    arrow(ax, 9.2, 7.75, cx, 7.0)
+    para(ax, cx, 6.6, "Вывод: y")
+    arrow(ax, cx, 6.25, cx, 5.65)
+    oval(ax, cx, 5.4, "Конец")
+    save(fig, "r2_z8.png")
+
+def r2_z9():
+    fig, ax = new_fig("Раздел 2. Задача 9\nСумма чисел до ввода 0 (цикл)", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    rect(ax, cx, 11.8, "S = 0")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    para(ax, cx, 10.5, "Ввод: n")
+    arrow(ax, cx, 10.15, cx, 9.2)
+    diamond(ax, cx, 8.7, "n = 0 ?")
+    arrow(ax, 6.5, 8.7, 8, 8.7, "Да")
+    arrow(ax, cx, 8.2, cx, 7.55)
+    rect(ax, cx, 7.2, "S = S + n")
+    arrow(ax, cx, 6.85, 2, 6.85)
+    arrow(ax, 2, 6.85, 2, 10.5)
+    arrow(ax, 2, 10.5, 3.4, 10.5)
+    para(ax, 8, 8.3, "Вывод: S", w=2.2)
+    arrow(ax, 8, 7.95, 8, 7.35)
+    oval(ax, 8, 7.1, "Конец")
+    save(fig, "r2_z9.png")
+
+def r2_z10():
+    fig, ax = new_fig("Раздел 2. Задача 10\nСумма четных, произведение нечетных", h=16)
+    cx = 5
+    oval(ax, cx, 15, "Начало")
+    arrow(ax, cx, 14.7, cx, 14.1)
+    para(ax, cx, 13.8, "Ввод: N")
+    arrow(ax, cx, 13.45, cx, 12.85)
+    rect(ax, cx, 12.5, "S=0, P=1, i=1")
+    arrow(ax, cx, 12.15, cx, 11.2)
+    diamond(ax, cx, 10.7, "i <= N ?")
+    arrow(ax, 6.5, 10.7, 8, 10.7, "Нет")
+    arrow(ax, cx, 10.2, cx, 9.55)
+    para(ax, cx, 9.2, "Ввод: num")
+    arrow(ax, cx, 8.85, cx, 7.95)
+    diamond(ax, cx, 7.5, "num чётное ?")
+    arrow(ax, 3.5, 7.5, 2.5, 6.5, "Да")
+    arrow(ax, 6.5, 7.5, 7.5, 6.5, "Нет")
+    rect(ax, 2.5, 6.1, "S = S + num", w=2.5)
+    rect(ax, 7.5, 6.1, "P = P * num", w=2.5)
+    arrow(ax, 2.5, 5.75, cx, 5.0)
+    arrow(ax, 7.5, 5.75, cx, 5.0)
+    rect(ax, cx, 4.6, "i = i + 1")
+    arrow(ax, cx, 4.25, 1.5, 4.25)
+    arrow(ax, 1.5, 4.25, 1.5, 10.7)
+    arrow(ax, 1.5, 10.7, 3.5, 10.7)
+    para(ax, 8, 10.3, "Вывод: S, P", w=2.2)
+    arrow(ax, 8, 9.95, 8, 9.35)
+    oval(ax, 8, 9.1, "Конец")
+    save(fig, "r2_z10.png")
+
+def r2_z11():
+    fig, ax = new_fig("Раздел 2. Задача 11\nP = xʸ + корни (цикл)", h=14)
+    cx = 5
+    oval(ax, cx, 13, "Начало")
+    arrow(ax, cx, 12.7, cx, 12.1)
+    para(ax, cx, 11.8, "Ввод: x, y")
+    arrow(ax, cx, 11.45, cx, 10.85)
+    rect(ax, cx, 10.5, "P = xʸ, n = 2")
+    arrow(ax, cx, 10.15, cx, 9.2)
+    diamond(ax, cx, 8.7, "n <= 10 ?")
+    arrow(ax, 6.5, 8.7, 8, 8.7, "Нет")
+    arrow(ax, cx, 8.2, cx, 7.55)
+    rect(ax, cx, 7.2, "P = P + ⁿ√(n·x·y)")
+    arrow(ax, cx, 6.85, cx, 6.25)
+    rect(ax, cx, 5.9, "n = n + 2")
+    arrow(ax, cx, 5.55, 2, 5.9)
+    arrow(ax, 2, 5.9, 2, 8.7)
+    arrow(ax, 2, 8.7, 3.5, 8.7)
+    para(ax, 8, 8.3, "Вывод: P", w=2.2)
+    arrow(ax, 8, 7.95, 8, 7.35)
+    oval(ax, 8, 7.1, "Конец")
+    save(fig, "r2_z11.png")
+
+
+print("=== Генерация блок-схем ===")
+print("\nРаздел 1:")
+r1_z1()
+r1_z2()
+r1_z3()
+r1_z5()
+r1_z6()
+r1_z7()
+r1_z8()
+r1_z9()
+r1_z10()
+r1_z11()
+r1_z14()
+r1_z15()
+r1_z16()
+r1_z23()
+r1_z24()
+r1_z25()
+r1_z26()
+
+print("\nРаздел 2:")
+r2_z1()
+r2_z2()
+r2_z3()
+r2_z4()
+r2_z5()
+r2_z6()
+r2_z7()
+r2_z8()
+r2_z9()
+r2_z10()
+r2_z11()
+
+print("\nГотово!")
