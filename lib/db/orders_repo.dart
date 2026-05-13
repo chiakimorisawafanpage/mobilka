@@ -11,11 +11,13 @@ class CreateOrderInput {
     required this.address,
     required this.comment,
     required this.paymentMethod,
+    this.userId,
   });
 
   final String address;
   final String comment;
   final PaymentMethod paymentMethod;
+  final int? userId;
 }
 
 Future<int> createOrderFromCart(Database db, CreateOrderInput input) async {
@@ -31,9 +33,10 @@ Future<int> createOrderFromCart(Database db, CreateOrderInput input) async {
 
   await db.transaction((txn) async {
     orderId = await txn.rawInsert(
-      '''INSERT INTO orders (createdAt, total, address, comment, paymentMethod, status)
-       VALUES (?, ?, ?, ?, ?, ?)''',
+      '''INSERT INTO orders (userId, createdAt, total, address, comment, paymentMethod, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?)''',
       [
+        input.userId,
         createdAt,
         total,
         input.address.trim(),
@@ -61,9 +64,19 @@ Future<int> createOrderFromCart(Database db, CreateOrderInput input) async {
   return orderId;
 }
 
-Future<List<OrderHeader>> listOrders(Database db) async {
+Future<List<OrderHeader>> listOrders(Database db, {int? userId}) async {
+  if (userId != null) {
+    final rows = await db.rawQuery(
+      '''SELECT id, userId, createdAt, total, address, comment, paymentMethod, status
+       FROM orders
+       WHERE userId = ?
+       ORDER BY id DESC''',
+      [userId],
+    );
+    return rows.map(OrderHeader.fromMap).toList();
+  }
   final rows = await db.rawQuery(
-    '''SELECT id, createdAt, total, address, comment, paymentMethod, status
+    '''SELECT id, userId, createdAt, total, address, comment, paymentMethod, status
      FROM orders
      ORDER BY id DESC''',
   );
@@ -72,7 +85,7 @@ Future<List<OrderHeader>> listOrders(Database db) async {
 
 Future<OrderHeader?> getOrder(Database db, int orderId) async {
   final rows = await db.rawQuery(
-    '''SELECT id, createdAt, total, address, comment, paymentMethod, status
+    '''SELECT id, userId, createdAt, total, address, comment, paymentMethod, status
      FROM orders
      WHERE id = ?''',
     [orderId],
@@ -107,4 +120,14 @@ Future<OrderHeader?> advanceOrderStatus(Database db, int orderId) async {
     [next.dbValue, orderId],
   );
   return getOrder(db, orderId);
+}
+
+Future<int> countOrdersForUser(Database db, int userId) async {
+  final row = await db.rawQuery(
+    'SELECT COUNT(*) as c FROM orders WHERE userId = ?',
+    [userId],
+  );
+  final v = row.first['c'];
+  if (v is int) return v;
+  return (v as num).toInt();
 }
