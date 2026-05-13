@@ -7,9 +7,10 @@ class AppShellController extends ChangeNotifier {
   final GlobalKey<NavigatorState> cartNavKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> ordersNavKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> profileNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> adminNavKey = GlobalKey<NavigatorState>();
 
   List<GlobalKey<NavigatorState>> get keys =>
-      [shopNavKey, cartNavKey, ordersNavKey, profileNavKey];
+      [shopNavKey, cartNavKey, ordersNavKey, profileNavKey, adminNavKey];
 
   void setTab(int i) {
     if (tab == i) return;

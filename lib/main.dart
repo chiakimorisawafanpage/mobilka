@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'db/app_database.dart';
+import 'db/auth_repo.dart';
 import 'navigation/app_shell.dart';
 import 'navigation/app_shell_controller.dart';
 import 'providers/auth_provider.dart';

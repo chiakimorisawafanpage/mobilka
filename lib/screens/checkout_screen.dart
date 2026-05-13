@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../db/auth_repo.dart';
 import '../db/cart_repo.dart';
 import '../db/orders_repo.dart';
 import '../models/cart_line.dart';
@@ -9,8 +10,6 @@ import '../models/payment_method.dart';
 import '../providers/auth_provider.dart';
 import '../theme.dart';
 import '../widgets/rainbow_divider.dart';
-import '../widgets/retro_button.dart';
-import '../widgets/retro_input.dart';
 import '../widgets/retro_panel.dart';
 import '../widgets/retro_select.dart';
 import 'login_screen.dart';
@@ -32,14 +31,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   double _total = 0;
   bool _isSubmitting = false;
 
-  static final List<RetroSelectOption<PaymentMethod>> _payOptions = [
-    const RetroSelectOption(
-        value: PaymentMethod.cash, label: 'CASH (old school)'),
-    const RetroSelectOption(
-        value: PaymentMethod.card, label: 'CARD (stub)'),
-    const RetroSelectOption(value: PaymentMethod.sbp, label: 'SBP (stub)'),
-  ];
-
   Future<void> _reload() async {
     final db = context.read<Database>();
     final l = await getCartLines(db);
@@ -54,7 +45,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _reload());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuth();
+      _reload();
+    });
+  }
+
+  void _checkAuth() {
+    final auth = context.read<AuthState>();
+    if (!auth.isLoggedIn) {
+      Navigator.of(context, rootNavigator: true).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => AuthScreen(
+            onSuccess: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> _onConfirmOrder(Database db, AuthProvider auth) async {
@@ -133,7 +142,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       appBar: retroAppBar('CHECKOUT'),
       body: ListView(
-        padding: const EdgeInsets.all(RetroSpacing.md),
+        padding: const EdgeInsets.all(16),
         children: [
           if (!auth.isLoggedIn)
             Padding(
@@ -167,34 +176,62 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'TOTAL: ${_total.toStringAsFixed(0)} \u20BD',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'monospace',
-                    color: RetroTheme.accentBlue,
-                    fontSize: 16,
+                Row(
+                  children: [
+                    const Icon(Icons.receipt_long_rounded,
+                        color: RetroTheme.accentBlue, size: 22),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Order Summary',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${_total.toStringAsFixed(0)} \u20BD',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        color: RetroTheme.accentBlue,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  onChanged: (t) => setState(() => _address = t),
+                  decoration: InputDecoration(
+                    labelText: 'Delivery address',
+                    prefixIcon:
+                        const Icon(Icons.location_on_outlined, size: 20),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: RetroTheme.border),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFF8F8F6),
                   ),
                 ),
-                const SizedBox(height: RetroSpacing.sm),
-                RetroInput(
-                  label: 'ADDRESS',
-                  value: _address,
-                  onChanged: (t) => setState(() => _address = t),
-                  placeholder: 'City, street, building...',
-                ),
-                RetroInput(
-                  label: 'COMMENT',
-                  value: _comment,
+                const SizedBox(height: 12),
+                TextField(
                   onChanged: (t) => setState(() => _comment = t),
-                  placeholder: 'Entrance/intercom...',
-                  multiline: true,
-                ),
-                RetroSelect<PaymentMethod>(
-                  label: 'PAYMENT',
-                  value: _payment,
-                  options: _payOptions,
-                  onChanged: (v) => setState(() => _payment = v),
+                  maxLines: 2,
+                  decoration: InputDecoration(
+                    labelText: 'Comment (optional)',
+                    prefixIcon: const Icon(Icons.comment_outlined, size: 20),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: RetroTheme.border),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFF8F8F6),
+                  ),
                 ),
                 const SizedBox(height: RetroSpacing.sm),
                 SizedBox(
@@ -207,9 +244,81 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     onPressed: () => _onConfirmOrder(db, auth),
                   ),
                 ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.check_circle_outline, size: 20),
+                    label: Text(
+                      _isSubmitting
+                          ? 'Processing...'
+                          : 'Confirm Order \u2022 ${_total.toStringAsFixed(0)} \u20BD',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2E7D32),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: (!auth.isLoggedIn ||
+                            _lines.isEmpty ||
+                            _isSubmitting)
+                        ? null
+                        : () async {
+                            if (_address.trim().length < 5) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Address is too short'),
+                                  backgroundColor: RetroTheme.danger,
+                                ),
+                              );
+                              return;
+                            }
+                            try {
+                              setState(() => _isSubmitting = true);
+                              final orderId = await createOrderFromCart(
+                                db,
+                                CreateOrderInput(
+                                  address: _address,
+                                  comment: _comment,
+                                  paymentMethod: _payment,
+                                ),
+                              );
+                              if (!context.mounted) return;
+                              await Navigator.of(context, rootNavigator: true)
+                                  .pushReplacement<void, void>(
+                                MaterialPageRoute<void>(
+                                  builder: (_) =>
+                                      OrderSuccessScreen(orderId: orderId),
+                                ),
+                              );
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error: $e'),
+                                  backgroundColor: RetroTheme.danger,
+                                ),
+                              );
+                            } finally {
+                              if (mounted) {
+                                setState(() => _isSubmitting = false);
+                              }
+                            }
+                          },
+                  ),
+                ),
               ],
             ),
           ),
+          const SizedBox(height: 16),
           const RainbowDivider(height: 2),
           RetroPanel(
             title: 'CART CONTENTS',

@@ -301,6 +301,7 @@ class _QtyButton extends StatelessWidget {
         child: Center(
           child: Icon(icon, size: 16, color: RetroTheme.text),
         ),
+        child: Icon(icon, size: 16, color: RetroTheme.text),
       ),
     );
   }

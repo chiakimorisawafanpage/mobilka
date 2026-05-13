@@ -2,13 +2,41 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/cart_line.dart';
 
+class OutOfStockException implements Exception {
+  OutOfStockException(this.productTitle, this.available);
+  final String productTitle;
+  final int available;
+
+  @override
+  String toString() =>
+      'Not enough stock for "$productTitle" (available: $available)';
+}
+
 Future<void> addToCart(Database db, int productId, int qty) async {
   final safeQty = qty < 1 ? 1 : qty;
   await db.transaction((txn) async {
+    final productRows = await txn.rawQuery(
+      'SELECT title, stock FROM products WHERE id = ?',
+      [productId],
+    );
+    if (productRows.isEmpty) return;
+    final stock = (productRows.first['stock'] as int?) ??
+        (productRows.first['stock'] as num).toInt();
+    final title = productRows.first['title']! as String;
+
     final rows = await txn.rawQuery(
       'SELECT qty FROM cart_items WHERE productId = ?',
       [productId],
     );
+    final currentInCart = rows.isEmpty
+        ? 0
+        : (rows.first['qty'] as int?) ?? (rows.first['qty'] as num).toInt();
+
+    final newQty = currentInCart + safeQty;
+    if (newQty > stock) {
+      throw OutOfStockException(title, stock);
+    }
+
     if (rows.isEmpty) {
       await txn.rawInsert(
         'INSERT INTO cart_items (productId, qty) VALUES (?, ?)',
@@ -16,11 +44,9 @@ Future<void> addToCart(Database db, int productId, int qty) async {
       );
       return;
     }
-    final current =
-        (rows.first['qty'] as int?) ?? (rows.first['qty'] as num).toInt();
     await txn.rawUpdate(
       'UPDATE cart_items SET qty = ? WHERE productId = ?',
-      [current + safeQty, productId],
+      [newQty, productId],
     );
   });
 }
@@ -34,6 +60,19 @@ Future<void> setCartQty(Database db, int productId, int qty) async {
   }
 
   await db.transaction((txn) async {
+    final productRows = await txn.rawQuery(
+      'SELECT title, stock FROM products WHERE id = ?',
+      [productId],
+    );
+    if (productRows.isEmpty) return;
+    final stock = (productRows.first['stock'] as int?) ??
+        (productRows.first['stock'] as num).toInt();
+    final title = productRows.first['title']! as String;
+
+    if (safeQty > stock) {
+      throw OutOfStockException(title, stock);
+    }
+
     final rows = await txn.rawQuery(
       'SELECT 1 FROM cart_items WHERE productId = ?',
       [productId],
@@ -70,7 +109,8 @@ Future<List<CartLine>> getCartLines(Database db) async {
        p.volumeMl as volumeMl,
        p.price as price,
        p.imageLabel as imageLabel,
-       p.gifUrl as gifUrl
+       p.gifUrl as gifUrl,
+       p.stock as stock
      FROM cart_items ci
      JOIN products p ON p.id = ci.productId
      ORDER BY p.title COLLATE NOCASE ASC''',

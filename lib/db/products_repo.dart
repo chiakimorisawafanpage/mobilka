@@ -74,7 +74,7 @@ Future<List<Product>> listProducts(Database db, ProductFilters filters) async {
   final w = _buildWhere(filters);
   final orderBy = _orderByClause(filters.sort);
   final query =
-      '''SELECT id, title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl
+      '''SELECT id, title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl, stock
      FROM products
      ${w.sql}
      $orderBy''';
@@ -85,7 +85,7 @@ Future<List<Product>> listProducts(Database db, ProductFilters filters) async {
 
 Future<Product?> getProduct(Database db, int id) async {
   final rows = await db.rawQuery(
-    '''SELECT id, title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl
+    '''SELECT id, title, brand, flavor, volumeMl, price, description, ingredients, eraNote, imageLabel, gifUrl, stock
      FROM products
      WHERE id = ?''',
     [id],

@@ -4,6 +4,7 @@ class AppUser {
     required this.email,
     required this.name,
     this.googleId,
+    required this.createdAt,
   });
 
   final int id;
@@ -19,4 +20,5 @@ class AppUser {
       googleId: map['googleId'] as String?,
     );
   }
+  final String createdAt;
 }

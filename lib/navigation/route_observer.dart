@@ -9,3 +9,5 @@ final RouteObserver<PageRoute<dynamic>> ordersRouteObserver =
     RouteObserver<PageRoute<dynamic>>();
 final RouteObserver<PageRoute<dynamic>> profileRouteObserver =
     RouteObserver<PageRoute<dynamic>>();
+final RouteObserver<PageRoute<dynamic>> adminRouteObserver =
+    RouteObserver<PageRoute<dynamic>>();

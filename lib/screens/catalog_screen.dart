@@ -10,9 +10,7 @@ import '../theme.dart';
 import '../widgets/blink_text.dart';
 import '../widgets/geocities_badges.dart';
 import '../widgets/rainbow_divider.dart';
-import '../widgets/retro_button.dart';
 import '../widgets/retro_input.dart';
-import '../widgets/retro_panel.dart';
 import '../widgets/retro_select.dart';
 import '../widgets/product_thumb.dart';
 import '../widgets/retro_marquee.dart';
@@ -159,8 +157,20 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
             ),
           ),
           const RainbowDivider(),
-          RetroPanel(
-            title: 'SEARCH',
+          // Search / Filter section
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -261,22 +271,43 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
                   spacing: RetroSpacing.sm,
                   runSpacing: RetroSpacing.sm,
                   children: [
-                    RetroButton(
-                        title: 'APPLY FILTERS', onPressed: _reloadProducts),
-                    RetroButton(
-                      title: 'RESET',
-                      variant: RetroButtonVariant.link,
-                      onPressed: () {
-                        setState(() {
-                          _search = '';
-                          _brand = 'any';
-                          _flavor = 'any';
-                          _minPrice = '';
-                          _maxPrice = '';
-                          _sort = ProductSort.priceAsc;
-                        });
-                        _reloadProducts();
-                      },
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.filter_list, size: 16),
+                          label: const Text('Apply',
+                              style: TextStyle(fontWeight: FontWeight.w600)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: RetroTheme.accentBlue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
+                          ),
+                          onPressed: _reloadProducts,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      height: 40,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _search = '';
+                            _brand = 'any';
+                            _flavor = 'any';
+                            _minPrice = '';
+                            _maxPrice = '';
+                            _sort = ProductSort.priceAsc;
+                          });
+                          _reloadProducts();
+                        },
+                        child: const Text('Reset',
+                            style: TextStyle(color: RetroTheme.muted)),
+                      ),
                     ),
                   ],
                 ),
@@ -430,6 +461,44 @@ class _CatalogScreenState extends State<CatalogScreen> with RouteAware {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StockBadge extends StatelessWidget {
+  const _StockBadge({required this.stock});
+  final int stock;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color bg;
+    final Color fg;
+    final String text;
+    if (stock <= 0) {
+      bg = const Color(0xFFFFEBEE);
+      fg = RetroTheme.danger;
+      text = 'Out of stock';
+    } else if (stock <= 5) {
+      bg = const Color(0xFFFFF3E0);
+      fg = const Color(0xFFE65100);
+      text = 'Only $stock left';
+    } else {
+      bg = const Color(0xFFE8F5E9);
+      fg = const Color(0xFF2E7D32);
+      text = 'In stock';
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(text,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: fg,
+          )),
     );
   }
 }

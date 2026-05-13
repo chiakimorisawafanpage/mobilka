@@ -8,6 +8,7 @@ class CartLine {
     required this.price,
     required this.imageLabel,
     this.gifUrl,
+    required this.stock,
   });
 
   final int productId;
@@ -18,6 +19,7 @@ class CartLine {
   final double price;
   final String imageLabel;
   final String? gifUrl;
+  final int stock;
 
   factory CartLine.fromMap(Map<String, Object?> map) {
     return CartLine(
@@ -30,6 +32,7 @@ class CartLine {
       price: (map['price'] as num?)!.toDouble(),
       imageLabel: (map['imageLabel'] as String?) ?? 'NO IMAGE',
       gifUrl: map['gifUrl'] as String?,
+      stock: (map['stock'] as int?) ?? (map['stock'] as num?)?.toInt() ?? 0,
     );
   }
 }

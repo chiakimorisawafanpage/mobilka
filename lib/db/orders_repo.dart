@@ -52,6 +52,10 @@ Future<int> createOrderFromCart(Database db, CreateOrderInput input) async {
          VALUES (?, ?, ?, ?, ?)''',
         [orderId, line.productId, line.qty, line.price, line.title],
       );
+      await txn.rawUpdate(
+        'UPDATE products SET stock = MAX(0, stock - ?) WHERE id = ?',
+        [line.qty, line.productId],
+      );
     }
 
     await txn.execute('DELETE FROM cart_items');
